@@ -124,7 +124,7 @@ std::string InputParser::get_help_message() {
     oss << "      Parameters:\n";
     oss << "        insert_position - Position in milliseconds where mixing starts.\n";
     oss << "        samples         - Additional samples to mix at insert_position.\n";
-//    хуй знает, потом придумаю
+//    low Pass Filter
     oss << "  lowPassFilter <start> <end> <cutoff frequency> - applies a simple low-pass filter to an audio signal. A low-pass filter removes high-frequency components while allowing low-frequency components to pass through, effectively smoothing out rapid changes in the signal.\n";
     oss << "      Parameters:\n";
     oss << "        start - Start time in milliseconds.\n";
