@@ -115,20 +115,20 @@ std::string InputParser::get_help_message() {
 //    Convertors description
     oss << "Converters:\n";
 //    mute
-    oss << "  mute <start> <end> - Mutes audio from start to end time (in ms).\n";
+    oss << "  mute <start> <end> - Mutes audio from start to end time (in s).\n";
     oss << "      Parameters:\n";
-    oss << "        start - Start time in milliseconds.\n";
-    oss << "        end   - End time in milliseconds.\n";
+    oss << "        start - Start time in seconds.\n";
+    oss << "        end   - End time in seconds.\n";
 //    mix
     oss << "  mix <insert_position> <samples...> - Mixes additional samples at the specified position.\n";
     oss << "      Parameters:\n";
-    oss << "        insert_position - Position in milliseconds where mixing starts.\n";
+    oss << "        insert_position - Position in seconds where mixing starts.\n";
     oss << "        samples         - Additional samples to mix at insert_position.\n";
-//    low Pass Filter
+    //    low Pass Filter
     oss << "  lowPassFilter <start> <end> <cutoff frequency> - applies a simple low-pass filter to an audio signal. A low-pass filter removes high-frequency components while allowing low-frequency components to pass through, effectively smoothing out rapid changes in the signal.\n";
     oss << "      Parameters:\n";
-    oss << "        start - Start time in milliseconds.\n";
-    oss << "        end   - End time in milliseconds.\n";
+    oss << "        start - Start time in seconds.\n";
+    oss << "        end   - End time in seconds.\n";
     oss << "        cutoff frequency   - Defines the maximum frequency allowed to pass in Hz.\n";
 
     return oss.str();
