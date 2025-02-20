@@ -1,7 +1,20 @@
 #dfgdfss
-#DEFINE a 4
-PUSH 8
+DEFINE a 10
+DEFINE b 20
+PUSH a
 PUSH 2
+-
 PRINT
-POP
+# 8
+PUSH 5
++
 PRINT
+# 13
+PUSH b
+/
+PRINT
+# 0.65
+PUSH 5
+*
+PRINT
+# 3.25

@@ -6,7 +6,7 @@ public class PushCommand implements Command {
     @Override
     public void execute(Context context, String[] args) {
         if (args.length != 1) {
-            throw new RuntimeException("Error: PUSH required 1 arg");
+            throw new RuntimeException("Error: PUSH requires 1 arg");
         }
         try {
             double value;

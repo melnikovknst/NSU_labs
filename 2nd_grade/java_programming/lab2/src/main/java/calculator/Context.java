@@ -16,11 +16,11 @@ public class Context {
         stack.push(value);
     }
 
-    public void pop() {
+    public double pop() {
         if (stack.isEmpty()) {
             throw new RuntimeException("Error: stack is empty");
         }
-        stack.pop();
+        return stack.pop();
     }
 
     public double peek() {
