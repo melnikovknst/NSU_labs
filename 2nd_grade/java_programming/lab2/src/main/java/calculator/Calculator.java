@@ -10,6 +10,7 @@ import calculator.commands.Command;
 public class Calculator {
     public static void main(String[] args) {
         CommandFactory factory = new CommandFactory();
+        Context context = new Context();
         Scanner scanner = null;
 
         if (args.length > 0) {
@@ -34,7 +35,11 @@ public class Calculator {
                 System.err.println("Error: Unknown command " + tokens[0]);
                 continue;
             }
-            command.execute();
+            try {
+                command.execute(context, java.util.Arrays.copyOfRange(tokens, 1, tokens.length));
+            } catch (RuntimeException e) {
+                System.err.println("Error: " + e.getMessage());
+            }
         }
     }
 }
