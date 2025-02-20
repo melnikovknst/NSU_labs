@@ -1,0 +1,10 @@
+#dfgdfss
+DEFINE a 4
+PUSH a
+SQRT
++ 3
+- 1
+* 4
+/ 2
+POP
+PRINT
