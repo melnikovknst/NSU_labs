@@ -1,12 +1,14 @@
 package calculator.commands;
 
 import calculator.Context;
+import calculator.exceptions.InvalidArgumentsException;
+import calculator.exceptions.UndefinedVariableException;
 
 public class PushCommand implements Command {
     @Override
-    public void execute(Context context, String[] args) {
+    public void execute(Context context, String[] args) throws InvalidArgumentsException, UndefinedVariableException {
         if (args.length != 1) {
-            throw new RuntimeException("Error: PUSH requires 1 arg");
+            throw new InvalidArgumentsException("Error: PUSH requires 1 arg");
         }
         try {
             double value;
@@ -17,7 +19,7 @@ public class PushCommand implements Command {
             }
             context.push(value);
         } catch (NumberFormatException e) {
-            throw new RuntimeException("Error: invalid arg: " + args[0]);
+            throw new UndefinedVariableException(args[0]);
         }
     }
 }

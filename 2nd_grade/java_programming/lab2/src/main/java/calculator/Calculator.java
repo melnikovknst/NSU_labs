@@ -1,14 +1,16 @@
 package calculator;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.io.FileNotFoundException;
 
 import calculator.commands.Command;
+import calculator.exceptions.CalculatorException;
+import calculator.exceptions.InvalidCommandException;
 
 
 public class Calculator {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InvalidCommandException {
         CommandFactory factory = new CommandFactory();
         Context context = new Context();
         Scanner scanner = null;
@@ -31,13 +33,12 @@ public class Calculator {
             String[] tokens = line.split(" ");
             Command command = factory.getCommand(tokens[0]);
 
-            if (command == null) {
-                System.err.println("Error: Unknown command " + tokens[0]);
-                continue;
-            }
+            if (command == null)
+                throw new InvalidCommandException(tokens[0]);
+
             try {
                 command.execute(context, java.util.Arrays.copyOfRange(tokens, 1, tokens.length));
-            } catch (RuntimeException e) {
+            } catch (CalculatorException e) {
                 System.err.println("Error: " + e.getMessage());
             }
         }
