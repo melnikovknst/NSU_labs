@@ -1,0 +1,54 @@
+2025-02-21 22:12:05 [main] INFO  Calculator - Читаем команды из файла: in.txt
+2025-02-21 22:16:15 [main] INFO  Calculator - Читаем команды из файла: in.txt
+2025-02-21 23:21:38 [main] INFO  Calculator - Reading commands from file: in.txt
+2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: DEFINE
+2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: DEFINE
+2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: PUSH
+2025-02-21 23:21:38 [main] DEBUG PushCommand - PUSH executed: 10.0
+2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: PUSH
+2025-02-21 23:21:38 [main] DEBUG PushCommand - PUSH executed: 2.0
+2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: -
+2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: PRINT
+2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: PUSH
+2025-02-21 23:21:38 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: +
+2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: PRINT
+2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: PUSH
+2025-02-21 23:21:38 [main] DEBUG PushCommand - PUSH executed: 20.0
+2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: /
+2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: PRINT
+2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: PUSH
+2025-02-21 23:21:38 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: *
+2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: PRINT
+2025-02-21 23:39:52 [main] INFO  Calculator - Reading commands from file: in.txt
+2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: DEFINE
+2025-02-21 23:39:52 [main] DEBUG DefineCommand - DEFINE executed: a = 10
+2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: DEFINE
+2025-02-21 23:39:52 [main] DEBUG DefineCommand - DEFINE executed: b = 20
+2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: PUSH
+2025-02-21 23:39:52 [main] DEBUG PushCommand - PUSH executed: 10.0
+2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: PUSH
+2025-02-21 23:39:52 [main] DEBUG PushCommand - PUSH executed: 2.0
+2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: -
+2025-02-21 23:39:52 [main] DEBUG SubtractCommand - Subtract executed: 8.0
+2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: PRINT
+2025-02-21 23:39:52 [main] DEBUG PrintCommand - PRINT executed
+2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: PUSH
+2025-02-21 23:39:52 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: +
+2025-02-21 23:39:52 [main] DEBUG AddCommand - Add executed: 13.0
+2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: PRINT
+2025-02-21 23:39:52 [main] DEBUG PrintCommand - PRINT executed
+2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: PUSH
+2025-02-21 23:39:52 [main] DEBUG PushCommand - PUSH executed: 20.0
+2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: /
+2025-02-21 23:39:52 [main] DEBUG DivideCommand - Divide executed: 0.65
+2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: PRINT
+2025-02-21 23:39:52 [main] DEBUG PrintCommand - PRINT executed
+2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: PUSH
+2025-02-21 23:39:52 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: *
+2025-02-21 23:39:52 [main] DEBUG MultiplyCommand - Multiply executed: 3.25
+2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: PRINT
+2025-02-21 23:39:52 [main] DEBUG PrintCommand - PRINT executed

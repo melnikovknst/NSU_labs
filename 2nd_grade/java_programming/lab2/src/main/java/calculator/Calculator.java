@@ -1,15 +1,20 @@
 package calculator;
 
-import java.io.File;
+import java.io.*;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
 
 import calculator.commands.Command;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import calculator.exceptions.CalculatorException;
 import calculator.exceptions.InvalidCommandException;
 
 
+
 public class Calculator {
+    private static final Logger logger = LogManager.getLogger(Calculator.class);
+
     public static void main(String[] args) throws InvalidCommandException {
         CommandFactory factory = new CommandFactory();
         Context context = new Context();
@@ -18,12 +23,14 @@ public class Calculator {
         if (args.length > 0) {
             try {
                 scanner = new Scanner(new File(args[0]));
+                logger.info("Reading commands from file: {}", args[0]);
             } catch (FileNotFoundException e) {
-                System.err.println("Error: no such file - " + args[0]);
+                logger.error("Error: no such file -  {}", args[0]);
                 System.exit(1);
             }
         } else {
             scanner = new Scanner(System.in);
+            logger.info("Reading commands from standard input");
         }
 
         while (scanner.hasNextLine()) {
@@ -37,9 +44,10 @@ public class Calculator {
                 throw new InvalidCommandException(tokens[0]);
 
             try {
+                logger.info("Executing command: {}", tokens[0]);
                 command.execute(context, java.util.Arrays.copyOfRange(tokens, 1, tokens.length));
             } catch (CalculatorException e) {
-                System.err.println("Error: " + e.getMessage());
+                logger.error("Executing error: {}", e.getMessage());
             }
         }
     }

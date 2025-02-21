@@ -1,10 +1,14 @@
 package calculator.commands;
 
 import calculator.Context;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import calculator.exceptions.InvalidArgumentsException;
 import calculator.exceptions.UndefinedVariableException;
 
 public class PushCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(PushCommand.class);
+
     @Override
     public void execute(Context context, String[] args) throws InvalidArgumentsException, UndefinedVariableException {
         if (args.length != 1) {
@@ -18,6 +22,8 @@ public class PushCommand implements Command {
                 value = Double.parseDouble(args[0]);
             }
             context.push(value);
+
+            logger.debug("PUSH executed: {}", value);
         } catch (NumberFormatException e) {
             throw new UndefinedVariableException(args[0]);
         }

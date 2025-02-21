@@ -1,5 +1,7 @@
 package calculator;
 
+import calculator.exceptions.UndefinedVariableException;
+
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Stack;
@@ -17,16 +19,10 @@ public class Context {
     }
 
     public double pop() {
-        if (stack.isEmpty()) {
-            throw new RuntimeException("Error: stack is empty");
-        }
         return stack.pop();
     }
 
     public double peek() {
-        if (stack.isEmpty()) {
-            throw new RuntimeException("Error: stack is empty");
-        }
         return stack.peek();
     }
 
@@ -34,9 +30,9 @@ public class Context {
         variables.put(name, value);
     }
 
-    public double getVariable(String name) {
+    public double getVariable(String name) throws UndefinedVariableException {
         if (!variables.containsKey(name)) {
-            throw new RuntimeException("Error: variable " + name + " is not defined");
+            throw new UndefinedVariableException("Error: variable " + name + " is not defined");
         }
         return variables.get(name);
     }
