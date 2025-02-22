@@ -1,0 +1,7 @@
+package calculator.exceptions;
+
+public class NegativeSqrtException extends CalculatorException {
+    public NegativeSqrtException(double a) {
+        super("Error: Impossible to extract the root from a negative number: " + a);
+    }
+}

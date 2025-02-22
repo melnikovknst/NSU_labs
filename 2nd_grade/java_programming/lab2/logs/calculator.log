@@ -1,54 +1,875 @@
-2025-02-21 22:12:05 [main] INFO  Calculator - Читаем команды из файла: in.txt
-2025-02-21 22:16:15 [main] INFO  Calculator - Читаем команды из файла: in.txt
-2025-02-21 23:21:38 [main] INFO  Calculator - Reading commands from file: in.txt
-2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: DEFINE
-2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: DEFINE
-2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: PUSH
+2025-02-21 22:12:05 [main] INFO  calculator - Читаем команды из файла: in.txt
+2025-02-21 22:16:15 [main] INFO  calculator - Читаем команды из файла: in.txt
+2025-02-21 23:21:38 [main] INFO  calculator - Reading commands from file: in.txt
+2025-02-21 23:21:38 [main] INFO  calculator - Executing command: DEFINE
+2025-02-21 23:21:38 [main] INFO  calculator - Executing command: DEFINE
+2025-02-21 23:21:38 [main] INFO  calculator - Executing command: PUSH
 2025-02-21 23:21:38 [main] DEBUG PushCommand - PUSH executed: 10.0
-2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: PUSH
+2025-02-21 23:21:38 [main] INFO  calculator - Executing command: PUSH
 2025-02-21 23:21:38 [main] DEBUG PushCommand - PUSH executed: 2.0
-2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: -
-2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: PRINT
-2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: PUSH
+2025-02-21 23:21:38 [main] INFO  calculator - Executing command: -
+2025-02-21 23:21:38 [main] INFO  calculator - Executing command: PRINT
+2025-02-21 23:21:38 [main] INFO  calculator - Executing command: PUSH
 2025-02-21 23:21:38 [main] DEBUG PushCommand - PUSH executed: 5.0
-2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: +
-2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: PRINT
-2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: PUSH
+2025-02-21 23:21:38 [main] INFO  calculator - Executing command: +
+2025-02-21 23:21:38 [main] INFO  calculator - Executing command: PRINT
+2025-02-21 23:21:38 [main] INFO  calculator - Executing command: PUSH
 2025-02-21 23:21:38 [main] DEBUG PushCommand - PUSH executed: 20.0
-2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: /
-2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: PRINT
-2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: PUSH
+2025-02-21 23:21:38 [main] INFO  calculator - Executing command: /
+2025-02-21 23:21:38 [main] INFO  calculator - Executing command: PRINT
+2025-02-21 23:21:38 [main] INFO  calculator - Executing command: PUSH
 2025-02-21 23:21:38 [main] DEBUG PushCommand - PUSH executed: 5.0
-2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: *
-2025-02-21 23:21:38 [main] INFO  Calculator - Executing command: PRINT
-2025-02-21 23:39:52 [main] INFO  Calculator - Reading commands from file: in.txt
-2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: DEFINE
+2025-02-21 23:21:38 [main] INFO  calculator - Executing command: *
+2025-02-21 23:21:38 [main] INFO  calculator - Executing command: PRINT
+2025-02-21 23:39:52 [main] INFO  calculator - Reading commands from file: in.txt
+2025-02-21 23:39:52 [main] INFO  calculator - Executing command: DEFINE
 2025-02-21 23:39:52 [main] DEBUG DefineCommand - DEFINE executed: a = 10
-2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: DEFINE
+2025-02-21 23:39:52 [main] INFO  calculator - Executing command: DEFINE
 2025-02-21 23:39:52 [main] DEBUG DefineCommand - DEFINE executed: b = 20
-2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: PUSH
+2025-02-21 23:39:52 [main] INFO  calculator - Executing command: PUSH
 2025-02-21 23:39:52 [main] DEBUG PushCommand - PUSH executed: 10.0
-2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: PUSH
+2025-02-21 23:39:52 [main] INFO  calculator - Executing command: PUSH
 2025-02-21 23:39:52 [main] DEBUG PushCommand - PUSH executed: 2.0
-2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: -
+2025-02-21 23:39:52 [main] INFO  calculator - Executing command: -
 2025-02-21 23:39:52 [main] DEBUG SubtractCommand - Subtract executed: 8.0
-2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: PRINT
+2025-02-21 23:39:52 [main] INFO  calculator - Executing command: PRINT
 2025-02-21 23:39:52 [main] DEBUG PrintCommand - PRINT executed
-2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: PUSH
+2025-02-21 23:39:52 [main] INFO  calculator - Executing command: PUSH
 2025-02-21 23:39:52 [main] DEBUG PushCommand - PUSH executed: 5.0
-2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: +
+2025-02-21 23:39:52 [main] INFO  calculator - Executing command: +
 2025-02-21 23:39:52 [main] DEBUG AddCommand - Add executed: 13.0
-2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: PRINT
+2025-02-21 23:39:52 [main] INFO  calculator - Executing command: PRINT
 2025-02-21 23:39:52 [main] DEBUG PrintCommand - PRINT executed
-2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: PUSH
+2025-02-21 23:39:52 [main] INFO  calculator - Executing command: PUSH
 2025-02-21 23:39:52 [main] DEBUG PushCommand - PUSH executed: 20.0
-2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: /
+2025-02-21 23:39:52 [main] INFO  calculator - Executing command: /
 2025-02-21 23:39:52 [main] DEBUG DivideCommand - Divide executed: 0.65
-2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: PRINT
+2025-02-21 23:39:52 [main] INFO  calculator - Executing command: PRINT
 2025-02-21 23:39:52 [main] DEBUG PrintCommand - PRINT executed
-2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: PUSH
+2025-02-21 23:39:52 [main] INFO  calculator - Executing command: PUSH
 2025-02-21 23:39:52 [main] DEBUG PushCommand - PUSH executed: 5.0
-2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: *
+2025-02-21 23:39:52 [main] INFO  calculator - Executing command: *
 2025-02-21 23:39:52 [main] DEBUG MultiplyCommand - Multiply executed: 3.25
-2025-02-21 23:39:52 [main] INFO  Calculator - Executing command: PRINT
+2025-02-21 23:39:52 [main] INFO  calculator - Executing command: PRINT
 2025-02-21 23:39:52 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 13:35:01 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 13:35:01 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 13:35:40 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 13:35:40 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 13:39:53 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 13:39:53 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 13:39:53 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 13:40:33 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 13:40:33 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 13:40:33 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 13:40:33 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 13:44:14 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 13:44:14 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 13:44:14 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 13:44:14 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 13:44:14 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 13:47:01 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 13:47:01 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 13:47:01 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 13:47:01 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 13:47:01 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 13:47:01 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 13:47:01 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 13:48:36 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 13:48:36 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 13:48:36 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 13:48:36 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 13:48:36 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 13:48:36 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 13:48:36 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 13:48:36 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 13:48:36 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 13:48:36 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 13:48:36 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 13:59:59 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 13:59:59 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 13:59:59 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 13:59:59 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 13:59:59 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 13:59:59 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 13:59:59 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 13:59:59 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 13:59:59 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 13:59:59 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 13:59:59 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 13:59:59 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 13:59:59 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 13:59:59 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:03:19 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:03:19 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:03:19 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:03:19 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:03:19 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:03:19 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:03:19 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:03:19 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:03:19 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:03:19 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:03:19 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:03:19 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:03:19 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:03:19 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:03:19 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:04:31 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:04:31 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:04:31 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:04:31 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:04:31 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:04:31 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:04:31 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:04:31 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:04:31 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:04:31 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:04:31 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:04:31 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:04:31 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:04:31 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:09:49 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:09:49 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:09:49 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:09:49 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:09:49 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:09:49 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:09:49 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:09:49 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:09:49 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:09:49 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:09:49 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:09:49 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:09:49 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:09:49 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:09:49 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:09:49 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:10:23 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:10:23 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:10:23 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:10:23 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:10:23 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:10:23 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:10:23 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:10:23 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:10:23 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:10:23 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:10:23 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:10:23 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:10:23 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:10:23 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:10:23 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:10:23 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:14:37 [main] INFO  Calculator - Reading commands from standard input
+2025-02-22 14:14:37 [main] INFO  Calculator - Reading commands from standard input
+2025-02-22 14:14:37 [main] INFO  Calculator - Reading commands from file: test_commands.txt
+2025-02-22 14:14:37 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:14:37 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:14:37 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:14:37 [main] DEBUG PushCommand - PUSH executed: 3.0
+2025-02-22 14:14:37 [main] INFO  Calculator - Executing command: +
+2025-02-22 14:14:37 [main] DEBUG AddCommand - Add executed: 8.0
+2025-02-22 14:14:37 [main] INFO  Calculator - Executing command: PRINT
+2025-02-22 14:14:37 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:14:37 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 14:14:37 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:14:37 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 14:14:37 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:14:37 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:14:37 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:14:37 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:14:37 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:14:37 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:14:37 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:14:37 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:14:37 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:14:37 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:14:37 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:14:37 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:14:37 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:14:37 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:14:37 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:14:37 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:14:37 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:17:32 [main] INFO  Calculator - Reading commands from standard input
+2025-02-22 14:17:32 [main] INFO  Calculator - Reading commands from standard input
+2025-02-22 14:17:32 [main] INFO  Calculator - Reading commands from file: test_commands.txt
+2025-02-22 14:17:32 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:17:32 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:17:32 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:17:32 [main] DEBUG PushCommand - PUSH executed: 3.0
+2025-02-22 14:17:32 [main] INFO  Calculator - Executing command: +
+2025-02-22 14:17:32 [main] DEBUG AddCommand - Add executed: 8.0
+2025-02-22 14:17:32 [main] INFO  Calculator - Executing command: PRINT
+2025-02-22 14:17:32 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:17:32 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 14:17:32 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:17:32 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 14:17:32 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:17:32 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:17:32 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:17:32 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:17:32 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:17:32 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:17:32 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:17:32 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:17:32 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:17:32 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:17:32 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:17:32 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:17:32 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:17:32 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:17:32 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:17:32 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:17:32 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:18:17 [main] INFO  Calculator - Reading commands from standard input
+2025-02-22 14:18:17 [main] INFO  Calculator - Reading commands from file: test_commands.txt
+2025-02-22 14:18:17 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:18:17 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:18:17 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:18:17 [main] DEBUG PushCommand - PUSH executed: 3.0
+2025-02-22 14:18:17 [main] INFO  Calculator - Executing command: +
+2025-02-22 14:18:17 [main] DEBUG AddCommand - Add executed: 8.0
+2025-02-22 14:18:17 [main] INFO  Calculator - Executing command: PRINT
+2025-02-22 14:18:17 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:18:17 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 14:18:17 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:18:17 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 14:18:17 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:18:17 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:18:17 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:18:17 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:18:17 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:18:17 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:18:17 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:18:17 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:18:17 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:18:17 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:18:17 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:18:17 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:18:17 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:18:17 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:18:17 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:18:17 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:18:17 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:22:45 [main] INFO  Calculator - Reading commands from standard input
+2025-02-22 14:22:45 [main] INFO  Calculator - Reading commands from file: test_commands.txt
+2025-02-22 14:22:45 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:22:45 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:22:45 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:22:45 [main] DEBUG PushCommand - PUSH executed: 3.0
+2025-02-22 14:22:45 [main] INFO  Calculator - Executing command: +
+2025-02-22 14:22:45 [main] DEBUG AddCommand - Add executed: 8.0
+2025-02-22 14:22:45 [main] INFO  Calculator - Executing command: PRINT
+2025-02-22 14:22:45 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:22:45 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 14:22:45 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:22:45 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 14:22:45 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:22:45 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:22:45 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:22:45 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:22:45 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:22:45 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:22:45 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:22:45 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:22:45 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:22:45 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:22:45 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:22:45 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:22:45 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:22:45 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:22:45 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:22:45 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:22:45 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:23:38 [main] INFO  Calculator - Reading commands from standard input
+2025-02-22 14:23:38 [main] INFO  Calculator - Reading commands from file: test_commands.txt
+2025-02-22 14:23:38 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:23:38 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:23:38 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:23:38 [main] DEBUG PushCommand - PUSH executed: 3.0
+2025-02-22 14:23:38 [main] INFO  Calculator - Executing command: +
+2025-02-22 14:23:38 [main] DEBUG AddCommand - Add executed: 8.0
+2025-02-22 14:23:38 [main] INFO  Calculator - Executing command: PRINT
+2025-02-22 14:23:38 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:23:38 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 14:23:38 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:23:38 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 14:23:38 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:23:38 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:23:38 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:23:38 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:23:38 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:23:38 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:23:38 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:23:38 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:23:38 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:23:38 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:23:38 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:23:38 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:23:38 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:23:38 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:23:38 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:23:38 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:23:38 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:29:23 [main] INFO  Calculator - Reading commands from standard input
+2025-02-22 14:29:23 [main] INFO  Calculator - Reading commands from file: test_commands.txt
+2025-02-22 14:29:23 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:29:23 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:29:23 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:29:23 [main] DEBUG PushCommand - PUSH executed: 3.0
+2025-02-22 14:29:23 [main] INFO  Calculator - Executing command: +
+2025-02-22 14:29:23 [main] DEBUG AddCommand - Add executed: 8.0
+2025-02-22 14:29:23 [main] INFO  Calculator - Executing command: PRINT
+2025-02-22 14:29:23 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:29:23 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 14:29:23 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:29:23 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 14:29:23 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:29:23 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:29:23 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:29:23 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:29:23 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:29:23 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:29:23 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:29:23 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:29:23 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:29:23 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:29:23 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:29:23 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:29:23 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:29:23 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:29:23 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:29:23 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:29:23 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:31:15 [main] INFO  Calculator - Reading commands from standard input
+2025-02-22 14:31:15 [main] INFO  Calculator - Reading commands from file: test_commands.txt
+2025-02-22 14:31:15 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:31:15 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:31:15 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:31:15 [main] DEBUG PushCommand - PUSH executed: 3.0
+2025-02-22 14:31:15 [main] INFO  Calculator - Executing command: +
+2025-02-22 14:31:15 [main] DEBUG AddCommand - Add executed: 8.0
+2025-02-22 14:31:15 [main] INFO  Calculator - Executing command: PRINT
+2025-02-22 14:31:15 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:31:15 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 14:31:15 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:31:15 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 14:31:15 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:31:15 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:31:15 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:31:15 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:31:15 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:31:15 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:31:15 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:31:15 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:31:15 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:31:15 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:31:15 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:31:15 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:31:15 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:31:15 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:31:15 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:31:15 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:31:15 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:32:20 [main] INFO  Calculator - Reading commands from standard input
+2025-02-22 14:32:20 [main] INFO  Calculator - Reading commands from file: test_commands.txt
+2025-02-22 14:32:20 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:32:20 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:32:20 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:32:20 [main] DEBUG PushCommand - PUSH executed: 3.0
+2025-02-22 14:32:20 [main] INFO  Calculator - Executing command: +
+2025-02-22 14:32:20 [main] DEBUG AddCommand - Add executed: 8.0
+2025-02-22 14:32:20 [main] INFO  Calculator - Executing command: PRINT
+2025-02-22 14:32:20 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:32:20 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 14:32:20 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:32:20 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 14:32:20 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:32:20 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:32:20 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:32:20 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:32:20 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:32:20 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:32:20 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:32:20 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:32:20 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:32:20 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:32:20 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:32:20 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:32:20 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:32:20 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:32:20 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:32:20 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:32:20 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:32:32 [main] INFO  Calculator - Reading commands from standard input
+2025-02-22 14:32:32 [main] INFO  Calculator - Reading commands from file: test_commands.txt
+2025-02-22 14:32:32 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:32:32 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:32:32 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:32:32 [main] DEBUG PushCommand - PUSH executed: 3.0
+2025-02-22 14:32:32 [main] INFO  Calculator - Executing command: +
+2025-02-22 14:32:32 [main] DEBUG AddCommand - Add executed: 8.0
+2025-02-22 14:32:32 [main] INFO  Calculator - Executing command: PRINT
+2025-02-22 14:32:32 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:32:32 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 14:32:32 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:32:32 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 14:32:32 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:32:32 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:32:32 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:32:32 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:32:32 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:32:32 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:32:32 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:32:32 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:32:32 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:32:32 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:32:32 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:32:32 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:32:32 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:32:32 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:32:32 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:32:32 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:32:32 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:33:33 [main] INFO  Calculator - Reading commands from standard input
+2025-02-22 14:33:33 [main] INFO  Calculator - Reading commands from file: test_commands.txt
+2025-02-22 14:33:33 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:33:33 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:33:33 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:33:33 [main] DEBUG PushCommand - PUSH executed: 3.0
+2025-02-22 14:33:33 [main] INFO  Calculator - Executing command: +
+2025-02-22 14:33:33 [main] DEBUG AddCommand - Add executed: 8.0
+2025-02-22 14:33:33 [main] INFO  Calculator - Executing command: PRINT
+2025-02-22 14:33:33 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:33:33 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 14:33:33 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:33:33 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 14:33:33 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:33:33 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:33:33 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:33:33 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:33:33 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:33:33 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:33:33 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:33:33 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:33:33 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:33:33 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:33:33 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:33:33 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:33:33 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:33:33 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:33:33 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:33:33 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:33:33 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:34:07 [main] INFO  Calculator - Reading commands from standard input
+2025-02-22 14:34:07 [main] INFO  Calculator - Reading commands from file: test_commands.txt
+2025-02-22 14:34:07 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:34:07 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:34:07 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:34:07 [main] DEBUG PushCommand - PUSH executed: 3.0
+2025-02-22 14:34:07 [main] INFO  Calculator - Executing command: +
+2025-02-22 14:34:07 [main] DEBUG AddCommand - Add executed: 8.0
+2025-02-22 14:34:07 [main] INFO  Calculator - Executing command: PRINT
+2025-02-22 14:34:07 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:34:07 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 14:34:07 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:34:07 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 14:34:07 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:34:07 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:34:07 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:34:07 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:34:07 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:34:07 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:34:07 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:34:07 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:34:07 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:34:07 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:34:07 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:34:07 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:34:07 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:34:07 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:34:07 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:34:07 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:34:07 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:37:01 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 14:37:01 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:37:01 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 14:37:01 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:37:01 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:37:01 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:37:01 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:37:01 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:37:01 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:37:01 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:37:01 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:37:01 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:37:01 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:37:01 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:37:01 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:37:01 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:37:01 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:37:01 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:37:01 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:37:01 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:37:24 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 14:37:24 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:37:24 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 14:37:24 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:37:24 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:37:24 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:37:24 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:37:24 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:37:24 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:37:24 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:37:24 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:37:24 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:37:24 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:37:24 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:37:24 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:37:24 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:37:24 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:37:24 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:37:24 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:37:24 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:37:55 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 14:37:55 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:37:55 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 14:37:55 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:37:55 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:37:55 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:37:55 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:37:55 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:37:55 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:37:55 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:37:55 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:37:55 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:37:55 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:37:55 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:37:55 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:37:55 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:37:55 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:37:55 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:37:55 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:37:55 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:38:48 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 14:38:48 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:38:48 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 14:38:48 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:38:48 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:38:48 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:38:48 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:38:48 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:38:48 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:38:48 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:38:48 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:38:48 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:38:48 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:38:48 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:38:48 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:38:48 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:38:48 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:38:48 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:38:48 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:38:48 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:39:00 [main] INFO  Calculator - Reading commands from standard input
+2025-02-22 14:39:00 [main] INFO  Calculator - Reading commands from file: test_commands.txt
+2025-02-22 14:39:00 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:39:00 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:39:00 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:39:00 [main] DEBUG PushCommand - PUSH executed: 3.0
+2025-02-22 14:39:00 [main] INFO  Calculator - Executing command: +
+2025-02-22 14:39:00 [main] DEBUG AddCommand - Add executed: 8.0
+2025-02-22 14:39:00 [main] INFO  Calculator - Executing command: PRINT
+2025-02-22 14:39:00 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:39:00 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 14:39:00 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:39:00 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 14:39:00 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:39:00 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:39:00 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:39:00 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:39:00 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:39:00 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:39:00 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:39:00 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:39:00 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:39:00 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:39:00 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:39:00 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:39:00 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:39:00 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:39:00 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:39:00 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:39:00 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:45:32 [main] INFO  Calculator - Reading commands from standard input
+2025-02-22 14:45:32 [main] INFO  Calculator - Reading commands from file: test_commands.txt
+2025-02-22 14:45:32 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:45:32 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:45:32 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 14:45:32 [main] DEBUG PushCommand - PUSH executed: 3.0
+2025-02-22 14:45:32 [main] INFO  Calculator - Executing command: +
+2025-02-22 14:45:32 [main] DEBUG AddCommand - Add executed: 8.0
+2025-02-22 14:45:32 [main] INFO  Calculator - Executing command: PRINT
+2025-02-22 14:45:32 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:45:32 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 14:45:32 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:45:32 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 14:45:32 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:45:32 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:45:32 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:45:32 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:45:32 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:45:32 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:45:32 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:45:32 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:45:32 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:45:32 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:45:32 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:45:32 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:45:32 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:45:32 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:45:32 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:45:32 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:45:32 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:48:58 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 14:48:58 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:48:58 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 14:48:58 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:48:58 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:48:58 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:48:58 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:48:58 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:48:58 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:48:58 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:48:58 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:48:58 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:48:58 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:48:58 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:48:58 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:48:58 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:48:58 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:48:58 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:48:58 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:48:58 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:51:49 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 14:51:49 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:51:49 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 14:51:49 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:51:49 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:51:49 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:51:49 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:51:49 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:51:49 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:51:49 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:51:49 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:51:49 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:51:49 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:51:49 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:51:49 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:51:49 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:51:49 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:51:49 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:51:49 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:51:49 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:51:53 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 14:51:53 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:51:53 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 14:51:53 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:51:53 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:51:53 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:51:53 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:51:53 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:51:53 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:51:53 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:51:53 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:51:53 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:51:53 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:51:53 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:51:53 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:51:53 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:51:53 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:51:53 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:51:53 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:51:53 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:52:04 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 14:52:04 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:52:04 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 14:52:04 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:52:04 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:52:04 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:52:04 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:52:04 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:52:04 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:52:04 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:52:04 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:52:04 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:52:04 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:52:04 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:52:04 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:52:04 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:52:04 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:52:04 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:52:04 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:52:04 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:52:55 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 14:52:55 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:52:55 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 14:52:55 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:52:55 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:52:55 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:52:55 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:52:55 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:52:55 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:52:55 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:52:55 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:52:55 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:52:55 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:52:55 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:52:55 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:52:55 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:52:55 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:52:55 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:52:55 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:52:55 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:56:37 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 14:56:37 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:56:37 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 14:56:37 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:56:37 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:56:37 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:56:37 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:56:37 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:56:37 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:56:37 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:56:37 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:56:37 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:56:37 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:56:37 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:56:37 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:56:37 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:56:37 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:56:37 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:56:37 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:56:37 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 14:57:48 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 14:57:48 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:57:48 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 14:57:48 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 14:57:48 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 14:57:48 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 14:57:48 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 14:57:48 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 14:57:48 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 14:57:48 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 14:57:48 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 14:57:48 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 14:57:48 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 14:57:48 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 14:57:48 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 14:57:48 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 14:57:48 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 14:57:48 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 14:57:48 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 14:57:48 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 15:01:26 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 15:01:26 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 15:01:26 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 15:01:26 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 15:01:26 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 15:01:26 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 15:01:26 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 15:01:26 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 15:01:26 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 15:01:26 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 15:01:26 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 15:01:26 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 15:01:26 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 15:01:26 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 15:01:26 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 15:01:26 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 15:01:26 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 15:01:26 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 15:01:26 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 15:01:26 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 15:04:32 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 15:04:32 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 15:04:32 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 15:04:32 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 15:04:32 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 15:04:32 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 15:04:32 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 15:04:32 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 15:04:32 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 15:04:32 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 15:04:32 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 15:04:32 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 15:04:32 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 15:04:32 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 15:04:32 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 15:04:32 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 15:04:32 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 15:04:32 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 15:04:32 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 15:04:32 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 15:07:42 [main] INFO  Calculator - Reading commands from standard input
+2025-02-22 15:07:42 [main] INFO  Calculator - Reading commands from file: test_commands.txt
+2025-02-22 15:07:42 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 15:07:42 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 15:07:42 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 15:07:42 [main] DEBUG PushCommand - PUSH executed: 3.0
+2025-02-22 15:07:42 [main] INFO  Calculator - Executing command: +
+2025-02-22 15:07:42 [main] DEBUG AddCommand - Add executed: 8.0
+2025-02-22 15:07:42 [main] INFO  Calculator - Executing command: PRINT
+2025-02-22 15:07:42 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 15:07:42 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 15:07:42 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 15:07:42 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 15:07:42 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 15:07:42 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 15:07:42 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 15:07:42 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 15:07:42 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 15:07:42 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 15:07:42 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 15:07:42 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 15:07:42 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 15:07:42 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 15:07:42 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 15:07:42 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 15:07:42 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 15:07:42 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 15:07:42 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 15:07:42 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 15:07:42 [main] DEBUG AddCommand - Add executed: 10.0
+2025-02-22 20:54:57 [main] INFO  Calculator - Reading commands from standard input
+2025-02-22 20:54:57 [main] INFO  Calculator - Reading commands from file: test_commands.txt
+2025-02-22 20:54:57 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 20:54:57 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 20:54:57 [main] INFO  Calculator - Executing command: PUSH
+2025-02-22 20:54:57 [main] DEBUG PushCommand - PUSH executed: 3.0
+2025-02-22 20:54:57 [main] INFO  Calculator - Executing command: +
+2025-02-22 20:54:57 [main] DEBUG AddCommand - Add executed: 8.0
+2025-02-22 20:54:57 [main] INFO  Calculator - Executing command: PRINT
+2025-02-22 20:54:57 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 20:54:57 [main] DEBUG SubtractCommand - Subtract executed: 7.0
+2025-02-22 20:54:57 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 20:54:57 [main] DEBUG SubtractCommand - Subtract executed: 6.0
+2025-02-22 20:54:57 [main] DEBUG SubtractCommand - Subtract executed: -2.0
+2025-02-22 20:54:57 [main] DEBUG PopCommand - POP executed: 42.0
+2025-02-22 20:54:57 [main] DEBUG PopCommand - POP executed: 20.0
+2025-02-22 20:54:57 [main] DEBUG PushCommand - PUSH executed: 5.0
+2025-02-22 20:54:57 [main] DEBUG PushCommand - PUSH executed: 42.0
+2025-02-22 20:54:57 [main] DEBUG MultiplyCommand - Multiply executed: 10.0
+2025-02-22 20:54:57 [main] DEBUG MultiplyCommand - Multiply executed: 12.0
+2025-02-22 20:54:57 [main] DEBUG MultiplyCommand - Multiply executed: -18.0
+2025-02-22 20:54:57 [main] DEBUG MultiplyCommand - Multiply executed: 0.0
+2025-02-22 20:54:57 [main] DEBUG SqrtCommand - Sqrt executed: 0.0
+2025-02-22 20:54:57 [main] DEBUG SqrtCommand - Sqrt executed: 3.0
+2025-02-22 20:54:57 [main] DEBUG DivideCommand - Divide executed: -5.0
+2025-02-22 20:54:57 [main] DEBUG DivideCommand - Divide executed: 5.0
+2025-02-22 20:54:57 [main] DEBUG DefineCommand - DEFINE executed: x = 3.0
+2025-02-22 20:54:57 [main] DEBUG PrintCommand - PRINT executed
+2025-02-22 20:54:57 [main] DEBUG AddCommand - Add executed: -10.0
+2025-02-22 20:54:57 [main] DEBUG AddCommand - Add executed: 10.0

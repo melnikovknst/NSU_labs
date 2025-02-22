@@ -32,7 +32,7 @@ public class Context {
 
     public double getVariable(String name) throws UndefinedVariableException {
         if (!variables.containsKey(name)) {
-            throw new UndefinedVariableException("Error: variable " + name + " is not defined");
+            throw new UndefinedVariableException(name);
         }
         return variables.get(name);
     }

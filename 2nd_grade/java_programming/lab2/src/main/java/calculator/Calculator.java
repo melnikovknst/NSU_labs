@@ -5,6 +5,7 @@ import java.util.Scanner;
 import java.io.FileNotFoundException;
 
 import calculator.commands.Command;
+import calculator.exceptions.MissingPropertiesException;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import calculator.exceptions.CalculatorException;
@@ -15,7 +16,7 @@ import calculator.exceptions.InvalidCommandException;
 public class Calculator {
     private static final Logger logger = LogManager.getLogger(Calculator.class);
 
-    public static void main(String[] args) throws InvalidCommandException {
+    public static void main(String[] args) throws InvalidCommandException, MissingPropertiesException {
         CommandFactory factory = new CommandFactory();
         Context context = new Context();
         Scanner scanner = null;
