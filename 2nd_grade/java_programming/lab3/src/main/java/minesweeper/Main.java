@@ -1,7 +1,8 @@
 package minesweeper;
 
-import minesweeper.model.Minefield;
 import minesweeper.model.Cell;
+import minesweeper.model.Minefield;
+import minesweeper.model.GameTimer;
 
 import java.util.Scanner;
 
@@ -10,8 +11,10 @@ public class Main {
         System.out.println("Minesweeper started!");
 
         Minefield minefield = new Minefield(9, 9, 10);
-
         printMinefield(minefield);
+
+        GameTimer timer = new GameTimer();
+        timer.startTimer();
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -20,6 +23,7 @@ public class Main {
             String input = scanner.nextLine();
             if (input.equalsIgnoreCase("exit")) {
                 System.out.println("Exiting the game...");
+                timer.stopTimer();
                 break;
             }
 
@@ -43,7 +47,7 @@ public class Main {
 
                 if (minefield.getCell(row, col).isMine()) {
                     System.out.println("You hit a mine!");
-
+                    timer.stopTimer();
                     break;
                 }
             } catch (NumberFormatException e) {
@@ -52,7 +56,7 @@ public class Main {
         }
 
         scanner.close();
-        System.out.println("Game over!");
+        System.out.println("Game over! Time elapsed: " + timer.getElapsedTime() + " seconds.");
     }
 
     private static void printMinefield(Minefield minefield) {
