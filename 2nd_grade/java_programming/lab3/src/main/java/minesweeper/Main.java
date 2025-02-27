@@ -16,7 +16,7 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         while (!controller.isGameOver()) {
-            System.out.println("\nEnter command ('row col' to reveal, 'FLAG row col' to place a flag, 'exit' to quit):");
+            System.out.println("\nEnter command ('row col' to reveal, 'flag row col' to place a flag, 'exit' to quit):");
 
             String input = scanner.nextLine();
             if (input.equalsIgnoreCase("exit")) {
@@ -25,7 +25,7 @@ public class Main {
             }
 
             String[] parts = input.split(" ");
-            if (parts.length == 3 && parts[0].equalsIgnoreCase("FLAG")) {
+            if (parts.length == 3 && parts[0].equalsIgnoreCase("flag")) {
                 try {
                     int row = Integer.parseInt(parts[1]);
                     int col = Integer.parseInt(parts[2]);
@@ -33,13 +33,13 @@ public class Main {
                     controller.toggleFlag(row, col);
                     controller.printMinefield();
                 } catch (NumberFormatException e) {
-                    System.out.println("Invalid input. Enter: FLAG row col");
+                    System.out.println("Invalid input. Enter: flag row col");
                 }
                 continue;
             }
 
             if (parts.length != 2) {
-                System.out.println("Invalid input. Please enter 'row col' or 'FLAG row col'.");
+                System.out.println("Invalid input. Please enter 'row col' or 'flag row col'.");
                 continue;
             }
 

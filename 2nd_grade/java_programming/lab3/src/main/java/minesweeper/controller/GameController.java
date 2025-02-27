@@ -67,12 +67,12 @@ public class GameController {
             for (int c = 0; c < minefield.getCols(); c++) {
                 Cell cell = minefield.getCell(r, c);
 
-                if (!cell.isRevealed()) {
+                if (cell.isFlagged()) {
+                    System.out.print("P ");
+                } else if (!cell.isRevealed()) {
                     System.out.print("■ ");
                 } else if (cell.isMine()) {
                     System.out.print("* ");
-                } else if (cell.isFlagged()) {
-                    System.out.print("P ");
                 }else {
                     System.out.print(cell.getSurroundingMines() + " ");
                 }
