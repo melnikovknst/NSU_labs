@@ -24,7 +24,6 @@ public class GameController {
         }
 
         minefield.revealCell(row, col);
-        printMinefield();
 
         if (minefield.getCell(row, col).isMine()) {
             System.out.println("You hit a mine!");
@@ -33,6 +32,27 @@ public class GameController {
             System.out.println("Congratulations! You cleared the minefield.");
             gameOver = true;
         }
+    }
+
+    public void toggleFlag(int row, int col) {
+        if (gameOver) {
+            System.out.println("Game is already over.");
+            return;
+        }
+
+        if (row < 0 || row >= minefield.getRows() || col < 0 || col >= minefield.getCols()) {
+            System.out.println("Coordinates out of bounds. Try again.");
+            return;
+        }
+
+        Cell cell = minefield.getCell(row, col);
+
+        if (cell.isRevealed()) {
+            System.out.println("Cannot place a flag on an opened cell.");
+            return;
+        }
+
+        cell.toggleFlag();
     }
 
     public boolean isGameOver() {
@@ -49,35 +69,5 @@ public class GameController {
             }
         }
         return true;
-    }
-
-    public void toggleFlag(int row, int col) {
-        Cell cell = minefield.getCell(row, col);
-
-        if (cell.isRevealed()) {
-            System.out.println("Cannot place a flag on an opened cell.");
-            return;
-        }
-
-        cell.toggleFlag();
-    }
-
-    public void printMinefield() {
-        for (int r = 0; r < minefield.getRows(); r++) {
-            for (int c = 0; c < minefield.getCols(); c++) {
-                Cell cell = minefield.getCell(r, c);
-
-                if (cell.isFlagged()) {
-                    System.out.print("P ");
-                } else if (!cell.isRevealed()) {
-                    System.out.print("■ ");
-                } else if (cell.isMine()) {
-                    System.out.print("* ");
-                }else {
-                    System.out.print(cell.getSurroundingMines() + " ");
-                }
-            }
-            System.out.println();
-        }
     }
 }
