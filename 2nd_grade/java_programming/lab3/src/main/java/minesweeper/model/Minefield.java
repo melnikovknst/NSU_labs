@@ -66,14 +66,42 @@ public class Minefield {
         return grid[row][col];
     }
 
+    private void floodFill(int row, int col) {
+        int[] dx = {-1, -1, -1, 0, 0, 1, 1, 1};
+        int[] dy = {-1, 0, 1, -1, 1, -1, 0, 1};
+
+        for (int i = 0; i < 8; i++) {
+            int nr = row + dx[i];
+            int nc = col + dy[i];
+
+            if (nr >= 0 && nr < rows && nc >= 0 && nc < cols) {
+                Cell neighbor = grid[nr][nc];
+
+                if (!neighbor.isRevealed() && !neighbor.isFlagged()) {
+                    neighbor.reveal();
+
+                    if (neighbor.getSurroundingMines() == 0) {
+                        floodFill(nr, nc);
+                    }
+                }
+            }
+        }
+    }
+
     public void revealCell(int row, int col) {
         if (firstMove) {
             generateMines(row, col);
             firstMove = false;
         }
 
-        if (!grid[row][col].isRevealed() && !grid[row][col].isFlagged()) {
-            grid[row][col].reveal();
+        if (grid[row][col].isRevealed() || grid[row][col].isFlagged()) {
+            return;
+        }
+
+        grid[row][col].reveal();
+
+        if (grid[row][col].getSurroundingMines() == 0) {
+            floodFill(row, col);
         }
     }
 
