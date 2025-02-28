@@ -19,9 +19,7 @@ public class ConsoleView {
         System.out.println("Minesweeper started!");
         printMinefield();
 
-        while (!controller.isGameOver()) {
-            System.out.println("\nEnter command ('row col' to reveal, 'flag row col' to place a flag, 'about' for help, 'exit' to quit):");
-
+        while (!controller.isGameOver() && !controller.isGameWon()) {
             String input = scanner.nextLine().trim();
 
             if (input.equalsIgnoreCase("exit")) {
@@ -66,7 +64,11 @@ public class ConsoleView {
             System.out.println("Invalid command. Type 'about' for more information.");
         }
 
-        System.out.println("Game over!");
+        if (controller.isGameWon()) {
+            System.out.println("Congratulations! You cleared the minefield!");
+        } else {
+            System.out.println("Game over!");
+        }
     }
 
     private void printAbout() {
@@ -88,10 +90,14 @@ public class ConsoleView {
                     System.out.print("X ");
                 } else if (cell.isFlagged()) {
                     System.out.print("P ");
+                } else if ((controller.isGameOver() || controller.isGameWon()) && cell.isMine()) {
+                    if (!cell.isRevealed()) {
+                        System.out.print("o ");
+                    } else {
+                        System.out.print("* ");
+                    }
                 } else if (!cell.isRevealed()) {
                     System.out.print("■ ");
-                } else if (cell.isMine()) {
-                    System.out.print("* ");
                 } else {
                     System.out.print(cell.getSurroundingMines() + " ");
                 }

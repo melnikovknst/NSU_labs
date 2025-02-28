@@ -9,6 +9,7 @@ public class Minefield {
     private final Cell[][] grid;
     private boolean firstMove;
     private boolean gameOver;
+    private boolean gameWon;
 
     public Minefield(int rows, int cols, int mines) {
         this.rows = rows;
@@ -17,6 +18,7 @@ public class Minefield {
         this.grid = new Cell[rows][cols];
         this.firstMove = true;
         this.gameOver = false;
+        this.gameWon = false;
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
@@ -94,6 +96,7 @@ public class Minefield {
             return false;
         }
 
+        checkWin();
         return true;
     }
 
@@ -109,16 +112,20 @@ public class Minefield {
         return gameOver;
     }
 
-    public boolean checkWin() {
+    public boolean isGameWon() {
+        return gameWon;
+    }
+
+    private void checkWin() {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 Cell cell = grid[r][c];
                 if (!cell.isMine() && !cell.isRevealed()) {
-                    return false;
+                    return;
                 }
             }
         }
-        return true;
+        gameWon = true;
     }
 
     private void floodFill(int row, int col) {
@@ -144,6 +151,8 @@ public class Minefield {
                     if (neighbor.getSurroundingMines() == 0) {
                         floodFill(nr, nc);
                     }
+
+                    checkWin();
                 }
             }
         }

@@ -21,8 +21,8 @@ public class GameController {
         return minefield.isGameOver();
     }
 
-    public boolean checkWin() {
-        return minefield.checkWin();
+    public boolean isGameWon() {
+        return minefield.isGameWon();
     }
 
     public Minefield getMinefield() {
