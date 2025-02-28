@@ -4,12 +4,15 @@ public class Cell {
     private boolean isMine;
     private boolean isRevealed;
     private boolean isFlagged;
+    private boolean incorrectFlag;
     private int surroundingMines;
+
 
     public Cell() {
         this.isMine = false;
         this.isRevealed = false;
         this.isFlagged = false;
+        this.incorrectFlag = false;
         this.surroundingMines = 0;
     }
 
@@ -19,6 +22,7 @@ public class Cell {
 
     public void setMine() {
         isMine = true;
+        this.surroundingMines = 1;
     }
 
     public boolean isRevealed() {
@@ -35,6 +39,14 @@ public class Cell {
 
     public void toggleFlag() {
         isFlagged = !isFlagged;
+    }
+
+    public boolean isIncorrectFlag() {
+        return incorrectFlag;
+    }
+
+    public void setIncorrectFlag(boolean incorrectFlag) {
+        this.incorrectFlag = incorrectFlag;
     }
 
     public int getSurroundingMines() {
