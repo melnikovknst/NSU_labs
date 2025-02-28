@@ -4,6 +4,7 @@ import minesweeper.controller.GameController;
 import minesweeper.model.Cell;
 import minesweeper.model.Minefield;
 import minesweeper.model.HighScoresManager;
+import minesweeper.exceptions.InvalidInputException;
 
 import java.util.Scanner;
 
@@ -45,6 +46,8 @@ public class ConsoleView {
                     printMinefield();
                 } catch (NumberFormatException e) {
                     System.out.println("Invalid input. Use: flag <row> <col>");
+                } catch (InvalidInputException e) {
+                    System.out.println(e.getMessage());
                 }
                 continue;
             }
@@ -60,6 +63,8 @@ public class ConsoleView {
                     printMinefield();
                 } catch (NumberFormatException e) {
                     System.out.println("Invalid input. Enter two numbers separated by a space.");
+                } catch (InvalidInputException e) {
+                    System.out.println(e.getMessage());
                 }
                 continue;
             }
@@ -93,7 +98,6 @@ public class ConsoleView {
         int timeElapsed = controller.getElapsedTime();
 
         System.out.println("\nmines: " + flagged + "/" + totalMines + " | time: " + timeElapsed + "s");
-
 
         for (int r = 0; r < minefield.getRows(); r++) {
             for (int c = 0; c < minefield.getCols(); c++) {
