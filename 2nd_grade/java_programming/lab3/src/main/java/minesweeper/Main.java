@@ -28,19 +28,25 @@ public class Main {
 
             if (input.startsWith("new game")) {
                 String[] parts = input.split(" ");
-                if (parts.length != 6) {
-                    System.out.println("Invalid command. Correct format: new game <text/graphic> <rows> <cols> <mines>");
-                    continue;
-                }
 
-                String mode = parts[2];
-                int rows, cols, mines;
-                try {
-                    rows = Integer.parseInt(parts[3]);
-                    cols = Integer.parseInt(parts[4]);
-                    mines = Integer.parseInt(parts[5]);
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid command. Rows, cols, and mines must be integers.");
+                String mode;
+                int rows = 9, cols = 9, mines = 10;
+
+                if (parts.length == 3 || parts.length == 6) {
+                    mode = parts[2];
+
+                    if (parts.length == 6) {
+                        try {
+                            rows = Integer.parseInt(parts[3]);
+                            cols = Integer.parseInt(parts[4]);
+                            mines = Integer.parseInt(parts[5]);
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid command. Rows, cols, and mines must be integers.");
+                            continue;
+                        }
+                    }
+                } else {
+                    System.out.println("Invalid command. Use: new game <text/graphic> [rows] [cols] [mines]");
                     continue;
                 }
 
@@ -63,7 +69,7 @@ public class Main {
         System.out.println("\nAvailable commands:");
         System.out.println("- 'exit' -> Quit the game.");
         System.out.println("- 'about' -> Show available commands.");
-        System.out.println("- 'new game <text/graphic> <rows> <cols> <mines>' -> Start a new game.");
+        System.out.println("- 'new game <text/graphic> [rows] [cols] [mines]' -> Start a new game.");
     }
 
     private static void startGame(String mode, int rows, int cols, int mines) {
