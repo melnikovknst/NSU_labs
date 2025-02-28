@@ -7,12 +7,16 @@ public class Minefield {
     private final int cols;
     private final int mines;
     private final Cell[][] grid;
+    private boolean firstMove;
+    private boolean gameOver;
 
     public Minefield(int rows, int cols, int mines) {
         this.rows = rows;
         this.cols = cols;
         this.mines = mines;
         this.grid = new Cell[rows][cols];
+        this.firstMove = true;
+        this.gameOver = false;
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
@@ -60,8 +64,100 @@ public class Minefield {
         }
     }
 
-    public Cell getCell(int row, int col) {
-        return grid[row][col];
+    public boolean revealCell(int row, int col) {
+        if (gameOver) {
+            return false;
+        }
+
+        if (firstMove) {
+            generateMines(row, col);
+            firstMove = false;
+        }
+
+        Cell cell = grid[row][col];
+
+        if (cell.isFlagged()) {
+            return true;
+        }
+
+        if ((cell.isRevealed() && countFlaggedNeighbors(row, col) == cell.getSurroundingMines())
+                || cell.getSurroundingMines() == 0) {
+            floodFill(row, col);
+            return true;
+        }
+
+        cell.reveal();
+
+        if (cell.isMine()) {
+            gameOver = true;
+            markIncorrectFlags();
+            return false;
+        }
+
+        return true;
+    }
+
+    public void toggleFlag(int row, int col) {
+         Cell cell = grid[row][col];
+
+        if (!cell.isRevealed()) {
+            cell.toggleFlag();
+        }
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public boolean checkWin() {
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                Cell cell = grid[r][c];
+                if (!cell.isMine() && !cell.isRevealed()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private void floodFill(int row, int col) {
+        int[] dx = {-1, -1, -1, 0, 0, 1, 1, 1};
+        int[] dy = {-1, 0, 1, -1, 1, -1, 0, 1};
+
+        for (int i = 0; i < 8; i++) {
+            int nr = row + dx[i];
+            int nc = col + dy[i];
+
+            if (nr >= 0 && nr < rows && nc >= 0 && nc < cols) {
+                Cell neighbor = grid[nr][nc];
+
+                if (!neighbor.isRevealed() && !neighbor.isFlagged()) {
+                    neighbor.reveal();
+
+                    if (neighbor.isMine()) {
+                        gameOver = true;
+                        markIncorrectFlags();
+                        return;
+                    }
+
+                    if (neighbor.getSurroundingMines() == 0) {
+                        floodFill(nr, nc);
+                    }
+                }
+            }
+        }
+    }
+
+    private void markIncorrectFlags() {
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                Cell cell = grid[r][c];
+                if (cell.isFlagged() && !cell.isMine()) {
+                    cell.setIncorrectFlag(true);
+                }
+            }
+        }
     }
 
     public int countFlaggedNeighbors(int row, int col) {
@@ -80,6 +176,10 @@ public class Minefield {
             }
         }
         return count;
+    }
+
+    public Cell getCell(int row, int col) {
+        return grid[row][col];
     }
 
     public int getRows() {

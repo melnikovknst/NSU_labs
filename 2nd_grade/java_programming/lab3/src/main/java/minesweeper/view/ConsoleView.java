@@ -8,12 +8,10 @@ import java.util.Scanner;
 
 public class ConsoleView {
     private final GameController controller;
-    private final Minefield minefield;
     private final Scanner scanner;
 
-    public ConsoleView(GameController controller, Minefield minefield) {
+    public ConsoleView(GameController controller) {
         this.controller = controller;
-        this.minefield = minefield;
         this.scanner = new Scanner(System.in);
     }
 
@@ -80,6 +78,8 @@ public class ConsoleView {
     }
 
     private void printMinefield() {
+        Minefield minefield = controller.getMinefield();
+
         for (int r = 0; r < minefield.getRows(); r++) {
             for (int c = 0; c < minefield.getCols(); c++) {
                 Cell cell = minefield.getCell(r, c);

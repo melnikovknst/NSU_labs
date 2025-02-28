@@ -71,10 +71,10 @@ public class Main {
         GameController controller = new GameController(minefield);
 
         if (mode.equals("text")) {
-            ConsoleView view = new ConsoleView(controller, minefield);
+            ConsoleView view = new ConsoleView(controller);
             view.start();
         } else {
-            System.out.println("soon");
+            System.out.println("Graphical mode is not implemented yet.");
         }
     }
 }
