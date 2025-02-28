@@ -69,7 +69,9 @@ public class Minefield {
     }
 
     public boolean revealCell(int row, int col) {
-        if (gameOver || gameWon) return false;
+        if (gameOver || gameWon) {
+            return false;
+        }
 
         if (firstMove) {
             generateMines(row, col);

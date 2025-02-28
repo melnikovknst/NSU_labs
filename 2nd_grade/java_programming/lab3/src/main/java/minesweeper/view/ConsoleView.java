@@ -3,16 +3,19 @@ package minesweeper.view;
 import minesweeper.controller.GameController;
 import minesweeper.model.Cell;
 import minesweeper.model.Minefield;
+import minesweeper.model.HighScoresManager;
 
 import java.util.Scanner;
 
 public class ConsoleView {
     private final GameController controller;
     private final Scanner scanner;
+    private final HighScoresManager scoresManager;
 
-    public ConsoleView(GameController controller) {
+    public ConsoleView(GameController controller, HighScoresManager scoresManager) {
         this.controller = controller;
         this.scanner = new Scanner(System.in);
+        this.scoresManager = scoresManager;
     }
 
     public void start() {
@@ -65,7 +68,11 @@ public class ConsoleView {
         }
 
         if (controller.isGameWon()) {
-            System.out.println("Congratulations! You cleared the minefield!");
+            int time = controller.getElapsedTime();
+            System.out.println("Congratulations! You cleared the minefield in " + time + " seconds!");
+            System.out.print("Enter your name: ");
+            String playerName = scanner.nextLine().trim();
+            scoresManager.addScore(playerName, time);
         } else {
             System.out.println("Game over!");
         }
@@ -83,8 +90,10 @@ public class ConsoleView {
         Minefield minefield = controller.getMinefield();
         int flagged = minefield.getFlaggedCells();
         int totalMines = minefield.getTotalMines();
+        int timeElapsed = controller.getElapsedTime();
 
-        System.out.println("\nmines: " + flagged + "/" + totalMines);
+        System.out.println("\nmines: " + flagged + "/" + totalMines + " | time: " + timeElapsed + "s");
+
 
         for (int r = 0; r < minefield.getRows(); r++) {
             for (int c = 0; c < minefield.getCols(); c++) {

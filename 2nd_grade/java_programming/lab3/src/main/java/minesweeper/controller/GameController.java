@@ -1,16 +1,24 @@
 package minesweeper.controller;
 
 import minesweeper.model.Minefield;
+import minesweeper.model.GameTimer;
 
 public class GameController {
     private final Minefield minefield;
+    private final GameTimer timer;
 
     public GameController(Minefield minefield) {
         this.minefield = minefield;
+        this.timer = new GameTimer();
+        timer.startTimer();
     }
 
     public boolean revealCell(int row, int col) {
-        return minefield.revealCell(row, col);
+        boolean result = minefield.revealCell(row, col);
+        if (minefield.isGameOver() || minefield.isGameWon()) {
+            timer.stopTimer();
+        }
+        return result;
     }
 
     public void toggleFlag(int row, int col) {
@@ -27,5 +35,9 @@ public class GameController {
 
     public Minefield getMinefield() {
         return minefield;
+    }
+
+    public int getElapsedTime() {
+        return timer.getElapsedTime();
     }
 }

@@ -3,12 +3,14 @@ package minesweeper;
 import minesweeper.controller.GameController;
 import minesweeper.model.Minefield;
 import minesweeper.view.ConsoleView;
+import minesweeper.model.HighScoresManager;
 
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        HighScoresManager scoresManager = new HighScoresManager();
 
         System.out.println("Welcome to Minesweeper! Type 'about' for more information.");
 
@@ -23,6 +25,11 @@ public class Main {
 
             if (input.equals("about")) {
                 printAbout();
+                continue;
+            }
+
+            if (input.equals("high scores")) {
+                printHighScores(scoresManager);
                 continue;
             }
 
@@ -55,7 +62,7 @@ public class Main {
                     continue;
                 }
 
-                startGame(mode, rows, cols, mines);
+                startGame(mode, rows, cols, mines, scoresManager);
                 continue;
             }
 
@@ -69,15 +76,23 @@ public class Main {
         System.out.println("\nAvailable commands:");
         System.out.println("- 'exit' -> Quit the game.");
         System.out.println("- 'about' -> Show available commands.");
+        System.out.println("- 'high scores' -> Show the best times.");
         System.out.println("- 'new game <text/graphic> [rows] [cols] [mines]' -> Start a new game.");
     }
 
-    private static void startGame(String mode, int rows, int cols, int mines) {
+    private static void printHighScores(HighScoresManager scoresManager) {
+        System.out.println("\nHigh Scores:");
+        for (String score : scoresManager.getHighScores()) {
+            System.out.println(score);
+        }
+    }
+
+    private static void startGame(String mode, int rows, int cols, int mines, HighScoresManager scoresManager) {
         Minefield minefield = new Minefield(rows, cols, mines);
         GameController controller = new GameController(minefield);
 
         if (mode.equals("text")) {
-            ConsoleView view = new ConsoleView(controller);
+            ConsoleView view = new ConsoleView(controller, scoresManager);
             view.start();
         } else {
             System.out.println("Graphical mode is not implemented yet.");
