@@ -81,6 +81,10 @@ public class ConsoleView {
 
     private void printMinefield() {
         Minefield minefield = controller.getMinefield();
+        int flagged = minefield.getFlaggedCells();
+        int totalMines = minefield.getTotalMines();
+
+        System.out.println("\nmines: " + flagged + "/" + totalMines);
 
         for (int r = 0; r < minefield.getRows(); r++) {
             for (int c = 0; c < minefield.getCols(); c++) {
@@ -90,7 +94,7 @@ public class ConsoleView {
                     System.out.print("X ");
                 } else if (cell.isFlagged()) {
                     System.out.print("P ");
-                } else if ((controller.isGameOver() || controller.isGameWon()) && cell.isMine()) {
+                } else if (controller.isGameOver() && cell.isMine()) {
                     if (!cell.isRevealed()) {
                         System.out.print("o ");
                     } else {

@@ -10,6 +10,7 @@ public class Minefield {
     private boolean firstMove;
     private boolean gameOver;
     private boolean gameWon;
+    private int flaggedCells;
 
     public Minefield(int rows, int cols, int mines) {
         this.rows = rows;
@@ -19,6 +20,7 @@ public class Minefield {
         this.firstMove = true;
         this.gameOver = false;
         this.gameWon = false;
+        this.flaggedCells = 0;
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
@@ -67,9 +69,7 @@ public class Minefield {
     }
 
     public boolean revealCell(int row, int col) {
-        if (gameOver) {
-            return false;
-        }
+        if (gameOver || gameWon) return false;
 
         if (firstMove) {
             generateMines(row, col);
@@ -82,29 +82,32 @@ public class Minefield {
             return true;
         }
 
-        if ((cell.isRevealed() && countFlaggedNeighbors(row, col) == cell.getSurroundingMines())
-                || cell.getSurroundingMines() == 0) {
-            floodFill(row, col);
-            return true;
-        }
-
-        cell.reveal();
-
         if (cell.isMine()) {
             gameOver = true;
             markIncorrectFlags();
             return false;
         }
 
-        checkWin();
+        if (cell.isRevealed() && countFlaggedNeighbors(row, col) == cell.getSurroundingMines()) {
+            floodFill(row, col);
+        } else {
+            cell.reveal();
+            if (cell.getSurroundingMines() == 0) {
+                floodFill(row, col);
+            }
+        }
+
+        updateGameState();
         return true;
     }
 
     public void toggleFlag(int row, int col) {
-         Cell cell = grid[row][col];
+        if (gameOver || gameWon) return;
+        Cell cell = grid[row][col];
 
         if (!cell.isRevealed()) {
             cell.toggleFlag();
+            updateGameState();
         }
     }
 
@@ -116,16 +119,31 @@ public class Minefield {
         return gameWon;
     }
 
-    private void checkWin() {
+    public int getFlaggedCells() {
+        return flaggedCells;
+    }
+
+    private void updateGameState() {
+        flaggedCells = 0;
+        boolean allSafeCellsRevealed = true;
+
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 Cell cell = grid[r][c];
+
+                if (cell.isFlagged()) {
+                    flaggedCells++;
+                }
+
                 if (!cell.isMine() && !cell.isRevealed()) {
-                    return;
+                    allSafeCellsRevealed = false;
                 }
             }
         }
-        gameWon = true;
+
+        if (allSafeCellsRevealed) {
+            gameWon = true;
+        }
     }
 
     private void floodFill(int row, int col) {
@@ -151,11 +169,11 @@ public class Minefield {
                     if (neighbor.getSurroundingMines() == 0) {
                         floodFill(nr, nc);
                     }
-
-                    checkWin();
                 }
             }
         }
+
+        updateGameState();
     }
 
     private void markIncorrectFlags() {
@@ -185,6 +203,10 @@ public class Minefield {
             }
         }
         return count;
+    }
+
+    public int getTotalMines() {
+        return mines;
     }
 
     public Cell getCell(int row, int col) {
