@@ -88,13 +88,42 @@ public class Minefield {
         }
     }
 
+    private int countFlaggedNeighbors(int row, int col) {
+        int count = 0;
+        int[] dx = {-1, -1, -1, 0, 0, 1, 1, 1};
+        int[] dy = {-1, 0, 1, -1, 1, -1, 0, 1};
+
+        for (int i = 0; i < 8; i++) {
+            int nr = row + dx[i];
+            int nc = col + dy[i];
+
+            if (nr >= 0 && nr < rows && nc >= 0 && nc < cols) {
+                if (grid[nr][nc].isFlagged()) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
     public void revealCell(int row, int col) {
         if (firstMove) {
             generateMines(row, col);
             firstMove = false;
         }
 
-        if (grid[row][col].isRevealed() || grid[row][col].isFlagged()) {
+        if (grid[row][col].isFlagged()) {
+            return;
+        }
+
+        Cell cell = grid[row][col];
+
+        if (cell.isRevealed()) {
+            int flaggedCount = countFlaggedNeighbors(row, col);
+
+            if (flaggedCount == cell.getSurroundingMines()) {
+                floodFill(row, col);
+            }
             return;
         }
 
