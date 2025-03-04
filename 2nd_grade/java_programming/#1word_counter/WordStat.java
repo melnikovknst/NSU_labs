@@ -2,82 +2,53 @@ import java.io.*;
 import java.util.*;
 
 public class WordStat {
-    private String inputFileName;
-    private Set<WordEntry> wordSet;
-    private int wordCounter;
+    private final String inputFileName;
+    private final Map<String, WordEntry> wordCountMap;
 
     public WordStat(String inputFileName) {
         this.inputFileName = inputFileName;
-        this.wordSet = new HashSet<>();
-        this.wordCounter = 0;
+        this.wordCountMap = new HashMap<>();
     }
 
     public void textProcessing() {
-        processFile();
+        readFromFileAndProcessWords();
     }
 
-    private void processFile() {
-        Reader reader = null;
-        try {
-            reader = new InputStreamReader(new FileInputStream(inputFileName));
-            BufferedReader bufferedReader = new BufferedReader(reader);
+    private void readFromFileAndProcessWords() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFileName))) {
             String line;
-
-            while ((line = bufferedReader.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
                 processLine(line);
             }
         } catch (IOException e) {
             System.err.println("Error: " + e.getLocalizedMessage());
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    e.printStackTrace(System.err);
-                }
-            }
         }
     }
 
     private void processLine(String line) {
-        int len = line.length();
         StringBuilder word = new StringBuilder();
 
-        for (int i = 0; i < len; i++) {
+        for (int i = 0; i < line.length(); i++) {
             char ch = line.charAt(i);
             if (Character.isLetterOrDigit(ch)) {
                 word.append(ch);
             } else if (word.length() > 0) {
-                addWord(word.toString());
+                addWordToMap(word.toString());
                 word.setLength(0);
             }
         }
 
         if (word.length() > 0) {
-            addWord(word.toString());
+            addWordToMap(word.toString());
         }
     }
 
-    private void addWord(String word) {
-        WordEntry newEntry = new WordEntry(word);
-        if (!wordSet.contains(newEntry)) {
-            wordSet.add(newEntry);
-        } else {
-            for (WordEntry entry : wordSet) {
-                if (entry.equals(newEntry)) {
-                    entry.incrementCount();
-                    break;
-                }
-            }
-        }
-        wordCounter++;
+    private void addWordToMap(String word) {
+        word = word.toLowerCase();
+        wordCountMap.computeIfAbsent(word, WordEntry::new).incrementCount();
     }
 
-    public Set<WordEntry> getWords() {
-        return wordSet;
-    }
-
-    public int getWordCounter() {
-        return wordCounter;
+    public Map<String, WordEntry> getWordCountMap() {
+        return wordCountMap;
     }
 }
