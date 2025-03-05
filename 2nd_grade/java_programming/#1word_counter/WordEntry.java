@@ -22,23 +22,6 @@ public class WordEntry {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null || getClass() != obj.getClass())
-            return false;
-
-        WordEntry wordEntry = (WordEntry) obj;
-
-        return Objects.equals(word, wordEntry.word);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(word);
-    }
-
-    @Override
     public String toString() {
         return word + ": " + count;
     }
