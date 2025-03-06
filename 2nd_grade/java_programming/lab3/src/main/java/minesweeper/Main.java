@@ -3,8 +3,10 @@ package minesweeper;
 import minesweeper.controller.GameController;
 import minesweeper.model.Minefield;
 import minesweeper.view.ConsoleView;
+import minesweeper.view.SwingView;
 import minesweeper.model.HighScoresManager;
 
+import javax.swing.*;
 import java.util.Scanner;
 
 public class Main {
@@ -14,23 +16,21 @@ public class Main {
 
         System.out.println("Welcome to Minesweeper! Type 'about' for more information.");
 
+        label:
         while (true) {
             System.out.println("\nEnter command:");
             String input = scanner.nextLine().trim().toLowerCase();
 
-            if (input.equals("exit")) {
-                System.out.println("Exiting the game...");
-                break;
-            }
-
-            if (input.equals("about")) {
-                printAbout();
-                continue;
-            }
-
-            if (input.equals("high scores")) {
-                printHighScores(scoresManager);
-                continue;
+            switch (input) {
+                case "exit":
+                    System.out.println("Exiting the game...");
+                    break label;
+                case "about":
+                    printAbout();
+                    continue;
+                case "high scores":
+                    printHighScores(scoresManager);
+                    continue;
             }
 
             if (input.startsWith("new game")) {
@@ -94,8 +94,8 @@ public class Main {
         if (mode.equals("text")) {
             ConsoleView view = new ConsoleView(controller, scoresManager);
             view.start();
-        } else {
-            System.out.println("Graphical mode is not implemented yet.");
+        } else if (mode.equals("graphic")) {
+            SwingUtilities.invokeLater(() -> new SwingView(controller));
         }
     }
 }
