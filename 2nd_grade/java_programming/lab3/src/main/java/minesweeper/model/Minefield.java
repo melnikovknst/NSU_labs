@@ -86,6 +86,7 @@ public class Minefield {
 
         if (cell.isMine()) {
             gameOver = true;
+            cell.reveal();
             markIncorrectFlags();
             return false;
         }

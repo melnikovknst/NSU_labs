@@ -3,6 +3,7 @@ package minesweeper.view;
 import minesweeper.controller.GameController;
 import minesweeper.model.Minefield;
 import minesweeper.model.Cell;
+import minesweeper.model.HighScoresManager;
 import minesweeper.exceptions.InvalidInputException;
 
 import javax.swing.*;
@@ -12,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import javax.imageio.ImageIO;
+import java.util.List;
 
 public class SwingView extends JFrame {
     private final GameController controller;
@@ -32,7 +34,6 @@ public class SwingView extends JFrame {
         this.cols = minefield.getCols();
         this.buttons = new JButton[rows][cols];
 
-        // Загружаем изображения
         mineIcon = loadIcon("/mine.png");
         flagIcon = loadIcon("/flag.png");
         wrongFlagIcon = loadIcon("/wrong_flag.png");
@@ -42,7 +43,6 @@ public class SwingView extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Панель состояния
         statusLabel = new JLabel();
         statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
         add(statusLabel, BorderLayout.NORTH);
@@ -72,7 +72,7 @@ public class SwingView extends JFrame {
                         } catch (InvalidInputException err) {
                             System.out.println(err.getMessage());
                         }
-                        updateBoard();
+                        updateField();
                     }
                 });
 
@@ -81,19 +81,18 @@ public class SwingView extends JFrame {
             }
         }
 
-        updateBoard();
+        updateField();
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
     }
 
-    private void updateBoard() {
+    private void updateField() {
         Minefield minefield = controller.getMinefield();
         int flagged = minefield.getFlaggedCells();
         int totalMines = minefield.getTotalMines();
         int timeElapsed = controller.getElapsedTime();
 
-        // Обновляем статусную строку
         statusLabel.setText("Mines: " + flagged + "/" + totalMines + " | Time: " + timeElapsed + "s");
 
         for (int r = 0; r < rows; r++) {
@@ -103,19 +102,16 @@ public class SwingView extends JFrame {
 
                 if (cell.isRevealed()) {
                     button.setEnabled(false);
-                    if (cell.isMine()) {
-                        button.setIcon(resizeIcon(mineIcon, button));
-                    } else {
-                        int count = cell.getSurroundingMines();
-                        button.setText(count > 0 ? String.valueOf(count) : "");
-                    }
+                    int count = cell.getSurroundingMines();
+                    button.setText(count > 0 ? String.valueOf(count) : "");
+
                 } else if (cell.isFlagged()) {
                     if (controller.isGameOver() && !cell.isMine()) {
                         button.setIcon(resizeIcon(wrongFlagIcon, button));
                     } else {
                         button.setIcon(resizeIcon(flagIcon, button));
                     }
-                } else if (controller.isGameOver() && cell.isMine()) {
+                } else if (controller.isGameOver() && cell.isMine() && !cell.isRevealed()) {
                     button.setIcon(resizeIcon(mineIcon, button));
                 } else {
                     button.setIcon(null);
@@ -125,7 +121,21 @@ public class SwingView extends JFrame {
         }
 
         if (controller.isGameWon()) {
-            JOptionPane.showMessageDialog(this, "Congratulations! You cleared the minefield!", "You Win!", JOptionPane.INFORMATION_MESSAGE);
+            // Показываем диалоговое окно для ввода имени
+            String playerName = JOptionPane.showInputDialog(this, "Congratulations! Enter your name for the high score list:");
+            if (playerName != null && !playerName.trim().isEmpty()) {
+                // Добавляем результат в таблицу рекордов
+                HighScoresManager highScoresManager = new HighScoresManager();
+                highScoresManager.addScore(playerName, timeElapsed);
+
+                // Показываем таблицу рекордов
+                StringBuilder scoresList = new StringBuilder("High Scores:\n");
+                List<String> highScores = highScoresManager.getHighScores();
+                for (String score : highScores) {
+                    scoresList.append(score).append("\n");
+                }
+                JOptionPane.showMessageDialog(this, scoresList.toString(), "High Scores", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
     }
 
@@ -151,7 +161,7 @@ public class SwingView extends JFrame {
         Image img = icon.getImage();
         int width = button.getWidth();
         int height = button.getHeight();
-        if (width == 0 || height == 0) return icon; // Предотвращаем деление на ноль
+        if (width == 0 || height == 0) return icon;
 
         Image resized = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         return new ImageIcon(resized);
