@@ -27,7 +27,7 @@ class CommandFactoryTest {
     }
 
     @Test
-    void testMissingPropertiesException() throws InterruptedException {
+    void testMissingPropertiesException() {
         Exception exception = assertThrows(MissingPropertiesException.class, CommandFactory::new);
 
         assertEquals("Error: commands.properties file is missing or cannot be loaded",

@@ -1,8 +1,8 @@
 package calculator.commands;
 
 import calculator.Context;
-import calculator.exceptions.CalculatorException;
+import calculator.exceptions.CalculatorCommandException;
 
 public interface Command {
-    void execute(Context context, String[] args) throws CalculatorException;
+    void execute(Context context, String[] args) throws CalculatorCommandException;
 }

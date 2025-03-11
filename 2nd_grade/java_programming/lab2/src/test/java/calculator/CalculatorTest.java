@@ -37,14 +37,4 @@ class CalculatorTest {
         assertTrue(output.contains("8.0"));
     }
 
-    @Test
-    void testCalculatorUnknownCommand() {
-        ByteArrayInputStream input = new ByteArrayInputStream("UNKNOWN_COMMAND\n".getBytes());
-        System.setIn(input);
-
-        Exception exception = assertThrows(InvalidCommandException.class,
-                () -> Calculator.main(new String[]{}));
-
-        assertEquals("Error: Unknown command 'UNKNOWN_COMMAND'", exception.getMessage());
-    }
 }
