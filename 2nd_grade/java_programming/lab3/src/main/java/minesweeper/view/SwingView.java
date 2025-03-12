@@ -141,7 +141,7 @@ public class SwingView extends JFrame {
 
     private void showGameOverDialog() {
         int option = JOptionPane.showOptionDialog(this, "Game Over! Choose an option:",
-                "Game Over", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
+                "Game Over!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
                 new String[]{"Restart", "Exit to Menu"}, "Restart");
 
         if (option == 0) {
