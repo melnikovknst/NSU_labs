@@ -63,11 +63,8 @@ public class SwingView extends JFrame {
                         try {
                             if (SwingUtilities.isRightMouseButton(e)) {
                                 controller.toggleFlag(row, col);
-                            } else if (SwingUtilities.isLeftMouseButton(e)) {
-                                if (!controller.revealCell(row, col)) {
-                                    buttons[row][col].setIcon(resizeIcon(explosionIcon, button));
-                                    JOptionPane.showMessageDialog(SwingView.this, "You hit a mine!", "Game Over", JOptionPane.ERROR_MESSAGE);
-                                }
+                            } else if (SwingUtilities.isLeftMouseButton(e) && !controller.revealCell(row, col)) {
+                                buttons[row][col].setIcon(resizeIcon(explosionIcon, button));
                             }
                         } catch (InvalidInputException err) {
                             System.out.println(err.getMessage());
@@ -120,15 +117,13 @@ public class SwingView extends JFrame {
             }
         }
 
+
         if (controller.isGameWon()) {
-            // Показываем диалоговое окно для ввода имени
             String playerName = JOptionPane.showInputDialog(this, "Congratulations! Enter your name for the high score list:");
             if (playerName != null && !playerName.trim().isEmpty()) {
-                // Добавляем результат в таблицу рекордов
                 HighScoresManager highScoresManager = new HighScoresManager();
                 highScoresManager.addScore(playerName, timeElapsed);
 
-                // Показываем таблицу рекордов
                 StringBuilder scoresList = new StringBuilder("High Scores:\n");
                 List<String> highScores = highScoresManager.getHighScores();
                 for (String score : highScores) {
@@ -136,7 +131,40 @@ public class SwingView extends JFrame {
                 }
                 JOptionPane.showMessageDialog(this, scoresList.toString(), "High Scores", JOptionPane.INFORMATION_MESSAGE);
             }
+            showGameOverDialog();
         }
+
+        if (controller.isGameOver()) {
+            showGameOverDialog();
+        }
+    }
+
+    private void showGameOverDialog() {
+        int option = JOptionPane.showOptionDialog(this, "Game Over! Choose an option:",
+                "Game Over", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
+                new String[]{"Restart", "Exit to Menu"}, "Restart");
+
+        if (option == 0) {
+            restartGame();
+        } else if (option == 1) {
+            exitToMenu();
+        }
+    }
+
+    private void restartGame() {
+        Minefield minefield = controller.getMinefield();
+        int rows = minefield.getRows();
+        int cols = minefield.getCols();
+        int totalMines = minefield.getTotalMines();
+
+        this.dispose();
+
+        GameController newController = new GameController(new Minefield(rows, cols, totalMines));
+        SwingUtilities.invokeLater(() -> new SwingView(newController));
+    }
+
+    private void exitToMenu() {
+        this.dispose();
     }
 
     private ImageIcon loadIcon(String path) {
