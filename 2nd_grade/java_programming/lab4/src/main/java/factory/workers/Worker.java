@@ -25,52 +25,13 @@ public class Worker implements Runnable
         {
             while (!Thread.currentThread().isInterrupted())
             {
-                Body body;
-                Motor motor;
-                Accessory accessory;
-
-                synchronized (bodyStorage)
-                {
-                    while (bodyStorage.getSize() == 0)
-                    {
-                        bodyStorage.wait();
-                    }
-                    body = bodyStorage.take();
-                    bodyStorage.notifyAll();
-                }
-
-                synchronized (motorStorage)
-                {
-                    while (motorStorage.getSize() == 0)
-                    {
-                        motorStorage.wait();
-                    }
-                    motor = motorStorage.take();
-                    motorStorage.notifyAll();
-                }
-
-                synchronized (accessoryStorage)
-                {
-                    while (accessoryStorage.getSize() == 0)
-                    {
-                        accessoryStorage.wait();
-                    }
-                    accessory = accessoryStorage.take();
-                    accessoryStorage.notifyAll();
-                }
+                Body body = bodyStorage.take();
+                Motor motor = motorStorage.take();
+                Accessory accessory = accessoryStorage.take();
 
                 Car car = new Car(body, motor, accessory);
 
-                synchronized (carStorage)
-                {
-                    while (carStorage.getSize() >= carStorage.getCapacity())
-                    {
-                        carStorage.wait();
-                    }
-                    carStorage.put(car);
-                    System.out.println("Built: " + car);
-                    carStorage.notifyAll();
-                }
+                carStorage.put(car);
             }
         }
         catch (InterruptedException e)

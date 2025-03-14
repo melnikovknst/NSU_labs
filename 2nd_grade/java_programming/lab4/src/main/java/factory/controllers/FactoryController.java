@@ -1,8 +1,7 @@
 package factory.controllers;
 
 import factory.storage.Storage;
-import factory.workers.ThreadPool;
-import factory.workers.Worker;
+import factory.workers.*;
 import factory.parts.*;
 
 public class FactoryController implements Runnable
@@ -12,17 +11,15 @@ public class FactoryController implements Runnable
     private final Storage<Motor> motorStorage;
     private final Storage<Accessory> accessoryStorage;
     private final ThreadPool threadPool;
-    private final int minCarThreshold;
 
     public FactoryController(Storage<Car> carStorage, Storage<Body> bodyStorage, Storage<Motor> motorStorage,
-                             Storage<Accessory> accessoryStorage, ThreadPool threadPool, int minCarThreshold)
+                             Storage<Accessory> accessoryStorage, ThreadPool threadPool)
     {
         this.carStorage = carStorage;
         this.bodyStorage = bodyStorage;
         this.motorStorage = motorStorage;
         this.accessoryStorage = accessoryStorage;
         this.threadPool = threadPool;
-        this.minCarThreshold = minCarThreshold;
     }
 
     @Override
@@ -30,24 +27,35 @@ public class FactoryController implements Runnable
     {
         try
         {
+            for (int i = 0; i < carStorage.getCapacity(); i++)
+            {
+                threadPool.submitTask(new Worker(bodyStorage, motorStorage, accessoryStorage, carStorage));
+            }
+
             while (!Thread.currentThread().isInterrupted())
             {
-                synchronized (carStorage)
+                synchronized (this)
                 {
-                    while (carStorage.getSize() > minCarThreshold)
-                    {
-                        carStorage.wait();
-                    }
+                    wait();
                 }
 
-                threadPool.submitTask(new Worker(bodyStorage, motorStorage, accessoryStorage, carStorage));
-
-                System.out.println("FactoryController: Added new car production task");
+                synchronized (carStorage)
+                {
+                    if (carStorage.getSize() == 0)
+                    {
+                        threadPool.submitTask(new Worker(bodyStorage, motorStorage, accessoryStorage, carStorage));
+                    }
+                }
             }
         }
         catch (InterruptedException e)
         {
             Thread.currentThread().interrupt();
         }
+    }
+
+    public synchronized void notifySale()
+    {
+        notify();
     }
 }

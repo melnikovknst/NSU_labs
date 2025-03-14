@@ -7,41 +7,50 @@ public class Storage<T>
 {
     private final int capacity;
     private final Queue<T> items = new LinkedList<>();
+    private final Object monitor = new Object();
 
     public Storage(int capacity)
     {
         this.capacity = capacity;
     }
 
-    public synchronized void put(T item) throws InterruptedException
+    public void put(T item) throws InterruptedException
     {
-        while (items.size() >= capacity)
+        synchronized (monitor)
         {
-            wait();
+            while (items.size() >= capacity)
+            {
+                monitor.wait();
+            }
+            items.add(item);
+            monitor.notify();
         }
-        items.add(item);
-        notifyAll();
     }
 
-    public synchronized T take() throws InterruptedException
+    public T take() throws InterruptedException
     {
-        while (items.isEmpty())
+        synchronized (monitor)
         {
-            wait();
+            while (items.isEmpty())
+            {
+                monitor.wait();
+            }
+            T item = items.poll();
+            monitor.notify();
+            return item;
         }
-        T item = items.poll();
-        notifyAll();
-        return item;
     }
 
-    public synchronized int getSize()
+    public int getSize()
     {
-        return items.size();
+        synchronized (monitor)
+        {
+            return items.size();
+        }
     }
 
-    public synchronized int getCapacity()
+    public int getCapacity()
     {
         return capacity;
     }
 }
-

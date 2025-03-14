@@ -31,7 +31,6 @@ public class Supplier<T extends Part> implements Runnable
                         storage.wait();
                     }
                     storage.put(part);
-                    System.out.println("Supplied: " + part);
                     storage.notifyAll();
                 }
                 Thread.sleep(delay);

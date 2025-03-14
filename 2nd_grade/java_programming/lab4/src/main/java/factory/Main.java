@@ -5,6 +5,7 @@ import factory.storage.Storage;
 import factory.suppliers.Supplier;
 import factory.workers.ThreadPool;
 import factory.controllers.FactoryController;
+import factory.dealers.Dealer;
 
 public class Main
 {
@@ -25,10 +26,15 @@ public class Main
 
         ThreadPool threadPool = new ThreadPool(3);
 
-        Thread factoryControllerThread = new Thread(
-                new FactoryController(carStorage, bodyStorage, motorStorage, accessoryStorage, threadPool, 2)
-        );
+        FactoryController factoryController = new FactoryController(carStorage, bodyStorage, motorStorage, accessoryStorage, threadPool);
+        Thread factoryControllerThread = new Thread(factoryController);
         factoryControllerThread.start();
+
+        Thread dealer1 = new Thread(new Dealer(carStorage, 1, 1500, true, factoryController));
+        Thread dealer2 = new Thread(new Dealer(carStorage, 2, 1000, true, factoryController));
+
+        dealer1.start();
+        dealer2.start();
 
         try
         {
@@ -44,5 +50,7 @@ public class Main
         accessorySupplier.interrupt();
         threadPool.shutdown();
         factoryControllerThread.interrupt();
+        dealer1.interrupt();
+        dealer2.interrupt();
     }
 }

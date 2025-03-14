@@ -14,10 +14,4 @@ public abstract class Part
     {
         return id;
     }
-
-    @Override
-    public String toString()
-    {
-        return this.getClass().getSimpleName() + " #" + id;
-    }
 }

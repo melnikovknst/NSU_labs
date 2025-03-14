@@ -16,14 +16,9 @@ public class Car
         this.accessory = accessory;
     }
 
-    public int getId()
-    {
-        return id;
-    }
+    public int getId() { return id; }
+    public Body getBody() { return body; }
+    public Motor getMotor() { return motor; }
+    public Accessory getAccessory() { return accessory; }
 
-    @Override
-    public String toString()
-    {
-        return "Car #" + id + " (Body: " + body.getId() + ", Motor: " + motor.getId() + ", Accessory: " + accessory.getId() + ")";
-    }
 }
