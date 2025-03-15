@@ -1,5 +1,6 @@
 package factory.workers;
 
+import factory.exceptions.InvalidThreadPoolSizeException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -12,6 +13,11 @@ public class ThreadPool
 
     public ThreadPool(int workerCount)
     {
+        if (workerCount <= 0)
+        {
+            throw new InvalidThreadPoolSizeException(workerCount);
+        }
+
         workers = new LinkedList<>();
         taskQueue = new LinkedList<>();
 

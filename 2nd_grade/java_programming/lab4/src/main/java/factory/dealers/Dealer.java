@@ -4,6 +4,7 @@ import factory.storage.Storage;
 import factory.controllers.FactoryController;
 import factory.parts.Car;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalTime;
@@ -11,6 +12,9 @@ import java.time.format.DateTimeFormatter;
 
 public class Dealer implements Runnable
 {
+    private static final String LOG_DIR = "logs";
+    private static final String LOG_FILE = LOG_DIR + "/factory_log.txt";
+
     private final Storage<Car> carStorage;
     private final int dealerId;
     private final int delay;
@@ -24,6 +28,12 @@ public class Dealer implements Runnable
         this.delay = delay;
         this.logEnabled = logEnabled;
         this.controller = controller;
+
+        File logDir = new File(LOG_DIR);
+        if (!logDir.exists())
+        {
+            logDir.mkdirs();
+        }
     }
 
     @Override
@@ -34,13 +44,13 @@ public class Dealer implements Runnable
             while (!Thread.currentThread().isInterrupted())
             {
                 Car car = carStorage.take();
+
                 if (logEnabled)
                 {
                     logSale(car);
                 }
 
                 controller.notifySale();
-
                 Thread.sleep(delay);
             }
         }
@@ -56,13 +66,13 @@ public class Dealer implements Runnable
         String logEntry = String.format("%s: Dealer %d: Car %d (Body: %d, Motor: %d, Accessory: %d)%n",
                 time, dealerId, car.getId(), car.getBody().getId(), car.getMotor().getId(), car.getAccessory().getId());
 
-        try (FileWriter writer = new FileWriter("factory_log.txt", true))
+        try (FileWriter writer = new FileWriter(LOG_FILE, true))
         {
             writer.write(logEntry);
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            System.err.println("Error writing to log file: " + e.getMessage());
         }
     }
 }

@@ -1,5 +1,6 @@
 package factory.storage;
 
+import factory.exceptions.StorageEmptyException;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -8,10 +9,12 @@ public class Storage<T>
     private final int capacity;
     private final Queue<T> items = new LinkedList<>();
     private final Object monitor = new Object();
+    private final String name;
 
-    public Storage(int capacity)
+    public Storage(int capacity, String name)
     {
         this.capacity = capacity;
+        this.name = name;
     }
 
     public void put(T item) throws InterruptedException
@@ -34,6 +37,10 @@ public class Storage<T>
             while (items.isEmpty())
             {
                 monitor.wait();
+            }
+            if (items.isEmpty())
+            {
+                throw new StorageEmptyException(name);
             }
             T item = items.poll();
             monitor.notify();

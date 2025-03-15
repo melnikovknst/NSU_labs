@@ -1,0 +1,9 @@
+body_storage_capacity=10
+motor_storage_capacity=10
+accessory_storage_capacity=10
+car_storage_capacity=5
+supplier_body_delay=500
+supplier_motor_delay=700
+supplier_accessory_delay=900
+dealer_delay=1500
+thread_pool_size=3
