@@ -11,6 +11,7 @@ public class FactoryController implements Runnable
     private final Storage<Motor> motorStorage;
     private final Storage<Accessory> accessoryStorage;
     private final ThreadPool threadPool;
+    private final Object controllerMonitor = new Object();
 
     public FactoryController(Storage<Car> carStorage, Storage<Body> bodyStorage, Storage<Motor> motorStorage,
                              Storage<Accessory> accessoryStorage, ThreadPool threadPool)
@@ -34,9 +35,9 @@ public class FactoryController implements Runnable
 
             while (!Thread.currentThread().isInterrupted())
             {
-                synchronized (this)
+                synchronized (controllerMonitor)
                 {
-                    wait();
+                    controllerMonitor.wait();
                 }
 
                 synchronized (carStorage)
@@ -54,8 +55,11 @@ public class FactoryController implements Runnable
         }
     }
 
-    public synchronized void notifySale()
+    public void notifySale()
     {
-        notify();
+        synchronized (controllerMonitor)
+        {
+            controllerMonitor.notify();
+        }
     }
 }

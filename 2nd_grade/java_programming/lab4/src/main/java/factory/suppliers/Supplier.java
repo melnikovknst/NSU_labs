@@ -7,7 +7,8 @@ public class Supplier<T extends Part> implements Runnable
 {
     private final Storage<T> storage;
     private final Class<T> partType;
-    private final int delay;
+    private int delay;
+    private int suppliedCount = 0;
 
     public Supplier(Storage<T> storage, Class<T> partType, int delay)
     {
@@ -31,7 +32,8 @@ public class Supplier<T extends Part> implements Runnable
                         storage.wait();
                     }
                     storage.put(part);
-                    storage.notifyAll();
+                    suppliedCount++;
+                    storage.notify();
                 }
                 Thread.sleep(delay);
             }
@@ -44,5 +46,20 @@ public class Supplier<T extends Part> implements Runnable
         {
             e.printStackTrace();
         }
+    }
+
+    public void setDelay(int delay)
+    {
+        this.delay = delay;
+    }
+
+    public int getDelay()
+    {
+        return delay;
+    }
+
+    public int getSuppliedCount()
+    {
+        return suppliedCount;
     }
 }

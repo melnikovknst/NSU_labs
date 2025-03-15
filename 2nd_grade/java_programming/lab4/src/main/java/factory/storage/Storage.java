@@ -6,7 +6,7 @@ import java.util.Queue;
 
 public class Storage<T>
 {
-    private final int capacity;
+    private int capacity;
     private final Queue<T> items = new LinkedList<>();
     private final Object monitor = new Object();
     private final String name;
@@ -59,5 +59,13 @@ public class Storage<T>
     public int getCapacity()
     {
         return capacity;
+    }
+
+    public void setCapacity(int capacity)
+    {
+        synchronized (monitor)
+        {
+            this.capacity = capacity;
+        }
     }
 }

@@ -17,9 +17,10 @@ public class Dealer implements Runnable
 
     private final Storage<Car> carStorage;
     private final int dealerId;
-    private final int delay;
+    private int delay;
     private final boolean logEnabled;
     private final FactoryController controller;
+    private int soldCars = 0;
 
     public Dealer(Storage<Car> carStorage, int dealerId, int delay, boolean logEnabled, FactoryController controller)
     {
@@ -32,7 +33,7 @@ public class Dealer implements Runnable
         File logDir = new File(LOG_DIR);
         if (!logDir.exists())
         {
-            logDir.mkdirs();
+            logDir.mkdir();
         }
     }
 
@@ -44,6 +45,7 @@ public class Dealer implements Runnable
             while (!Thread.currentThread().isInterrupted())
             {
                 Car car = carStorage.take();
+                soldCars++;
 
                 if (logEnabled)
                 {
@@ -74,5 +76,20 @@ public class Dealer implements Runnable
         {
             System.err.println("Error writing to log file: " + e.getMessage());
         }
+    }
+
+    public void setDelay(int delay)
+    {
+        this.delay = delay;
+    }
+
+    public int getDelay()
+    {
+        return delay;
+    }
+
+    public int getSoldCarsCount()
+    {
+        return soldCars;
     }
 }

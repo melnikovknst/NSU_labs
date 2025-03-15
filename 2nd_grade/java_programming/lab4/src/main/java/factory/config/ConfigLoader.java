@@ -22,7 +22,8 @@ public class ConfigLoader
             "supplier_motor_delay",
             "supplier_accessory_delay",
             "dealer_delay",
-            "thread_pool_size"
+            "workers",
+            "dealer_count"
     );
 
     public static Properties loadConfig(String[] args)
@@ -43,7 +44,7 @@ public class ConfigLoader
 
                 if (!"y".equals(input))
                 {
-                    System.out.println("Exiting program.");
+                    System.out.println("Exiting...");
                     System.exit(0);
                 }
             }

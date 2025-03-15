@@ -7,73 +7,101 @@ import java.util.Queue;
 
 public class ThreadPool
 {
-    private final List<Thread> workers;
-    private final Queue<Runnable> taskQueue;
+    private List<Thread> workers;
+    private final Queue<Runnable> taskQueue = new LinkedList<>();
     private boolean isRunning = true;
+    private int workerCount;
+    private final Object monitor = new Object();
 
     public ThreadPool(int workerCount)
     {
-        if (workerCount <= 0)
-        {
-            throw new InvalidThreadPoolSizeException(workerCount);
-        }
-
-        workers = new LinkedList<>();
-        taskQueue = new LinkedList<>();
-
-        for (int i = 0; i < workerCount; i++)
-        {
-            Thread workerThread = new Thread(() ->
-            {
-                try
-                {
-                    while (isRunning)
-                    {
-                        Runnable task;
-                        synchronized (taskQueue)
-                        {
-                            while (taskQueue.isEmpty() && isRunning)
-                            {
-                                taskQueue.wait();
-                            }
-                            if (!isRunning)
-                            {
-                                break;
-                            }
-                            task = taskQueue.poll();
-                        }
-                        if (task != null)
-                        {
-                            task.run();
-                        }
-                    }
-                }
-                catch (InterruptedException e)
-                {
-                    Thread.currentThread().interrupt();
-                }
-            });
-
-            workerThread.start();
-            workers.add(workerThread);
-        }
+        setWorkerCount(workerCount);
     }
 
     public void submitTask(Runnable task)
     {
-        synchronized (taskQueue)
+        synchronized (monitor)
         {
             taskQueue.add(task);
-            taskQueue.notify();
+            monitor.notify();
         }
+    }
+
+    public void setWorkerCount(int newCount)
+    {
+        if (newCount <= 0)
+        {
+            throw new InvalidThreadPoolSizeException(newCount);
+        }
+
+        synchronized (monitor)
+        {
+            if (workers != null)
+            {
+                for (Thread worker : workers)
+                {
+                    worker.interrupt();
+                }
+            }
+
+            this.workerCount = newCount;
+            workers = new LinkedList<>();
+
+            for (int i = 0; i < workerCount; i++)
+            {
+                Thread workerThread = new Thread(() ->
+                {
+                    try
+                    {
+                        while (isRunning)
+                        {
+                            Runnable task;
+                            synchronized (monitor)
+                            {
+                                if (taskQueue.isEmpty())
+                                {
+                                    monitor.wait();
+                                }
+                                if (!isRunning)
+                                {
+                                    break;
+                                }
+                                task = taskQueue.poll();
+                            }
+                            if (task != null)
+                            {
+                                task.run();
+                            }
+                        }
+                    }
+                    catch (InterruptedException e)
+                    {
+                        Thread.currentThread().interrupt();
+                    }
+                });
+
+                workerThread.start();
+                workers.add(workerThread);
+            }
+        }
+    }
+
+    public synchronized int getQueueSize()
+    {
+        return taskQueue.size();
+    }
+
+    public int getWorkerCount()
+    {
+        return workerCount;
     }
 
     public void shutdown()
     {
         isRunning = false;
-        synchronized (taskQueue)
+        synchronized (monitor)
         {
-            taskQueue.notifyAll();
+            monitor.notify();
         }
         for (Thread worker : workers)
         {
