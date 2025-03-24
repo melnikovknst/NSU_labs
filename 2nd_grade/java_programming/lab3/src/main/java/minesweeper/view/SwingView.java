@@ -27,6 +27,8 @@ public class SwingView extends JFrame {
     private final ImageIcon wrongFlagIcon;
     private final ImageIcon explosionIcon;
 
+    private Timer timer;
+
     public SwingView(GameController controller) {
         this.controller = controller;
         Minefield minefield = controller.getMinefield();
@@ -78,19 +80,26 @@ public class SwingView extends JFrame {
             }
         }
 
+        timer = new Timer(1000, e -> updateTimer());
+        timer.start();
+
         updateField();
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
     }
 
-    private void updateField() {
+    private void updateTimer() {
         Minefield minefield = controller.getMinefield();
         int flagged = minefield.getFlaggedCells();
         int totalMines = minefield.getTotalMines();
         int timeElapsed = controller.getElapsedTime();
 
         statusLabel.setText("Mines: " + flagged + "/" + totalMines + " | Time: " + timeElapsed + "s");
+    }
+
+    private void updateField() {
+        Minefield minefield = controller.getMinefield();
 
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
@@ -121,6 +130,7 @@ public class SwingView extends JFrame {
         if (controller.isGameWon()) {
             String playerName = JOptionPane.showInputDialog(this, "Congratulations! Enter your name for the high score list:");
             if (playerName != null && !playerName.trim().isEmpty()) {
+                int timeElapsed = controller.getElapsedTime();
                 HighScoresManager highScoresManager = new HighScoresManager();
                 highScoresManager.addScore(playerName, timeElapsed);
 
@@ -164,6 +174,10 @@ public class SwingView extends JFrame {
     }
 
     private void exitToMenu() {
+        if (timer != null) {
+            timer.stop();
+        }
+
         this.dispose();
     }
 
