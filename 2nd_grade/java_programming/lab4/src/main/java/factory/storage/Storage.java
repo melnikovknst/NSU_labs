@@ -9,12 +9,10 @@ public class Storage<T>
     private int capacity;
     private final Queue<T> items = new LinkedList<>();
     private final Object monitor = new Object();
-    private final String name;
 
-    public Storage(int capacity, String name)
+    public Storage(int capacity)
     {
         this.capacity = capacity;
-        this.name = name;
     }
 
     public void put(T item) throws InterruptedException
@@ -26,7 +24,7 @@ public class Storage<T>
                 monitor.wait();
             }
             items.add(item);
-            monitor.notify();
+            monitor.notifyAll();
         }
     }
 
@@ -38,12 +36,8 @@ public class Storage<T>
             {
                 monitor.wait();
             }
-            if (items.isEmpty())
-            {
-                throw new StorageEmptyException(name);
-            }
             T item = items.poll();
-            monitor.notify();
+            monitor.notifyAll();
             return item;
         }
     }
@@ -61,11 +55,12 @@ public class Storage<T>
         return capacity;
     }
 
-    public void setCapacity(int capacity)
+    public void setCapacity(int newCapacity)
     {
         synchronized (monitor)
         {
-            this.capacity = capacity;
+            this.capacity = newCapacity;
+            monitor.notifyAll();
         }
     }
 }
