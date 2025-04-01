@@ -8,13 +8,14 @@ public class Supplier<T extends Part> implements Runnable
     private final Storage<T> storage;
     private final Class<T> partType;
     private int delay;
-    private int suppliedCount = 0;
+    private int suppliedCount;
 
     public Supplier(Storage<T> storage, Class<T> partType, int delay)
     {
         this.storage = storage;
         this.partType = partType;
         this.delay = delay;
+        this.suppliedCount = 0;
     }
 
     @Override
@@ -25,16 +26,8 @@ public class Supplier<T extends Part> implements Runnable
             while (!Thread.currentThread().isInterrupted())
             {
                 T part = partType.getDeclaredConstructor().newInstance();
-                synchronized (storage)
-                {
-                    while (storage.getSize() >= storage.getCapacity())
-                    {
-                        storage.wait();
-                    }
-                    storage.put(part);
-                    suppliedCount++;
-                    storage.notify();
-                }
+                storage.put(part);
+                suppliedCount++;
                 Thread.sleep(delay);
             }
         }
