@@ -179,7 +179,7 @@ public class FactoryGUI extends JFrame
 
     private JSlider createSlider(int initialValue)
     {
-        JSlider slider = new JSlider(500, 5000, initialValue);
+        JSlider slider = new JSlider(0, 5000, initialValue);
         slider.setMajorTickSpacing(1000);
         slider.setPaintTicks(true);
         return slider;
