@@ -1,5 +1,7 @@
 package minesweeper.model;
 
+import minesweeper.exceptions.InvalidInputException;
+
 import java.util.Random;
 
 public class Minefield {
@@ -11,6 +13,7 @@ public class Minefield {
     private boolean gameOver;
     private boolean gameWon;
     private int flaggedCells;
+    private boolean[][] mineMatrix;
 
     public Minefield(int rows, int cols, int mines) {
         this.rows = rows;
@@ -21,6 +24,7 @@ public class Minefield {
         this.gameOver = false;
         this.gameWon = false;
         this.flaggedCells = 0;
+        this.mineMatrix = new boolean[rows][cols];
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
@@ -37,8 +41,8 @@ public class Minefield {
             int r = random.nextInt(rows);
             int c = random.nextInt(cols);
 
-            if (!grid[r][c].isMine() && (r != excludeRow || c != excludeCol)) {
-                grid[r][c].setMine();
+            if (!mineMatrix[r][c] && (r != excludeRow || c != excludeCol)) {
+                mineMatrix[r][c] = true;
                 placedMines++;
             }
         }
@@ -68,7 +72,9 @@ public class Minefield {
         }
     }
 
-    public boolean revealCell(int row, int col) {
+    public boolean revealCell(int row, int col) throws InvalidInputException {
+        validateCoordinates(row, col);
+
         if (gameOver || gameWon) {
             return false;
         }
@@ -104,7 +110,9 @@ public class Minefield {
         return true;
     }
 
-    public void toggleFlag(int row, int col) {
+    public void toggleFlag(int row, int col) throws InvalidInputException {
+        validateCoordinates(row, col);
+
         if (gameOver || gameWon) return;
         Cell cell = grid[row][col];
 
@@ -222,5 +230,12 @@ public class Minefield {
 
     public int getCols() {
         return cols;
+    }
+
+    private void validateCoordinates(int row, int col) throws InvalidInputException {
+        if (row < 0 || row >= rows || col < 0 || col >= cols) {
+            throw new InvalidInputException("Invalid coordinates. Enter values within the grid range: "
+                    + (rows - 1) + " " + (cols - 1) + ".");
+        }
     }
 }
