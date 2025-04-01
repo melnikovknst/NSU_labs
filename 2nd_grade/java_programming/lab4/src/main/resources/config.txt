@@ -6,5 +6,5 @@ supplier_body_delay=1500
 supplier_motor_delay=1700
 supplier_accessory_delay=1900
 dealer_delay=2000
-workers=3
-dealer_count=2
+workers=8
+dealer_count=8
