@@ -12,18 +12,20 @@ public class ConsoleView {
     private final GameController controller;
     private final Scanner scanner;
     private final HighScoresManager scoresManager;
+    private final Minefield minefield;
 
     public ConsoleView(GameController controller, HighScoresManager scoresManager) {
         this.controller = controller;
         this.scanner = new Scanner(System.in);
         this.scoresManager = scoresManager;
+        this.minefield = controller.getMinefield();
     }
 
     public void start() {
         System.out.println("Minesweeper started!");
         printMinefield();
 
-        while (!controller.isGameOver() && !controller.isGameWon()) {
+        while (!minefield.isGameOver() && !minefield.isGameWon()) {
             String input = scanner.nextLine().trim();
 
             if (input.equalsIgnoreCase("exit")) {
@@ -42,7 +44,7 @@ public class ConsoleView {
                 try {
                     row = Integer.parseInt(parts[1]);
                     col = Integer.parseInt(parts[2]);
-                    controller.toggleFlag(row, col);
+                    minefield.toggleFlag(row, col);
                     printMinefield();
                 } catch (NumberFormatException e) {
                     System.out.println("Invalid input. Use: flag <row> <col>");
@@ -72,7 +74,7 @@ public class ConsoleView {
             System.out.println("Invalid command. Type 'about' for more information.");
         }
 
-        if (controller.isGameWon()) {
+        if (minefield.isGameWon()) {
             int time = controller.getElapsedTime();
             System.out.println("Congratulations! You cleared the minefield in " + time + " seconds!");
             System.out.print("Enter your name: ");
@@ -92,7 +94,6 @@ public class ConsoleView {
     }
 
     private void printMinefield() {
-        Minefield minefield = controller.getMinefield();
         int flagged = minefield.getFlaggedCells();
         int totalMines = minefield.getTotalMines();
         int timeElapsed = controller.getElapsedTime();
@@ -107,7 +108,7 @@ public class ConsoleView {
                     System.out.print("X ");
                 } else if (cell.isFlagged()) {
                     System.out.print("P ");
-                } else if (controller.isGameOver() && cell.isMine()) {
+                } else if (minefield.isGameOver() && cell.isMine()) {
                     if (!cell.isRevealed()) {
                         System.out.print("o ");
                     } else {
