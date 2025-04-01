@@ -1,8 +1,8 @@
 package factory.controllers;
 
 import factory.storage.Storage;
-import factory.workers.*;
 import factory.parts.*;
+import factory.workers.*;
 
 public class FactoryController implements Runnable
 {
@@ -11,7 +11,6 @@ public class FactoryController implements Runnable
     private final Storage<Motor> motorStorage;
     private final Storage<Accessory> accessoryStorage;
     private final ThreadPool threadPool;
-    private final Object controllerMonitor = new Object();
 
     public FactoryController(Storage<Car> carStorage, Storage<Body> bodyStorage, Storage<Motor> motorStorage,
                              Storage<Accessory> accessoryStorage, ThreadPool threadPool)
@@ -35,9 +34,9 @@ public class FactoryController implements Runnable
 
             while (!Thread.currentThread().isInterrupted())
             {
-                synchronized (controllerMonitor)
+                synchronized (this)
                 {
-                    controllerMonitor.wait();
+                    wait();
                 }
 
                 synchronized (carStorage)
@@ -55,11 +54,8 @@ public class FactoryController implements Runnable
         }
     }
 
-    public void notifySale()
+    public synchronized void notifySale()
     {
-        synchronized (controllerMonitor)
-        {
-            controllerMonitor.notify();
-        }
+        notify();
     }
 }
