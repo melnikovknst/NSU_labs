@@ -24,7 +24,6 @@ public class FactoryGUI extends JFrame
     private final Supplier<Accessory> accessorySupplier;
     private final List<Dealer> dealers;
     private final ThreadPool threadPool;
-    private final FactoryController factoryController;
 
     private final JLabel bodyCountLabel;
     private final JLabel motorCountLabel;
@@ -40,11 +39,11 @@ public class FactoryGUI extends JFrame
     private final JSlider motorSpeedSlider;
     private final JSlider accessorySpeedSlider;
     private final JSlider dealerSpeedSlider;
-    private final JTextField workerCountField;
-    private final JTextField bodyCapacityField;
-    private final JTextField motorCapacityField;
-    private final JTextField accessoryCapacityField;
-    private final JTextField carCapacityField;
+    private final JLabel workerCountLabel;
+    private final JLabel bodyCapacityLabel;
+    private final JLabel motorCapacityLabel;
+    private final JLabel accessoryCapacityLabel;
+    private final JLabel carCapacityLabel;
 
     public FactoryGUI(Storage<Body> bodyStorage, Storage<Motor> motorStorage, Storage<Accessory> accessoryStorage,
                       Storage<Car> carStorage, Supplier<Body> bodySupplier, Supplier<Motor> motorSupplier,
@@ -60,10 +59,9 @@ public class FactoryGUI extends JFrame
         this.accessorySupplier = accessorySupplier;
         this.dealers = dealers;
         this.threadPool = threadPool;
-        this.factoryController = factoryController;
 
         setTitle("Factory Management");
-        setSize(600, 400);
+        setSize(1000, 700);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLayout(new GridLayout(7, 1));
 
@@ -106,15 +104,15 @@ public class FactoryGUI extends JFrame
         storagesPanel.add(new JLabel("Cars"));
 
         storagesPanel.add(new JLabel("Capacity:"));
-        bodyCapacityField = createCapacityField(bodyStorage);
-        motorCapacityField = createCapacityField(motorStorage);
-        accessoryCapacityField = createCapacityField(accessoryStorage);
-        carCapacityField = createCapacityField(carStorage);
+        bodyCapacityLabel = createCapacityLabel(bodyStorage);
+        motorCapacityLabel = createCapacityLabel(motorStorage);
+        accessoryCapacityLabel = createCapacityLabel(accessoryStorage);
+        carCapacityLabel = createCapacityLabel(carStorage);
 
-        storagesPanel.add(bodyCapacityField);
-        storagesPanel.add(motorCapacityField);
-        storagesPanel.add(accessoryCapacityField);
-        storagesPanel.add(carCapacityField);
+        storagesPanel.add(bodyCapacityLabel);
+        storagesPanel.add(motorCapacityLabel);
+        storagesPanel.add(accessoryCapacityLabel);
+        storagesPanel.add(carCapacityLabel);
 
         storagesPanel.add(new JLabel("Stored:"));
         bodyCountLabel = new JLabel();
@@ -131,11 +129,9 @@ public class FactoryGUI extends JFrame
         JPanel workersPanel = new JPanel();
         workersPanel.setBorder(BorderFactory.createTitledBorder("Workers"));
 
-        workerCountField = new JTextField(String.valueOf(threadPool.getWorkerCount()), 5);
-        workerCountField.addActionListener(e -> threadPool.setWorkerCount(Integer.parseInt(workerCountField.getText())));
-
+        workerCountLabel = new JLabel(String.valueOf(threadPool.getWorkerCount()));
         workersPanel.add(new JLabel("Number of Workers:"));
-        workersPanel.add(workerCountField);
+        workersPanel.add(workerCountLabel);
 
         // Dealers Panel
         JPanel dealersPanel = new JPanel(new GridLayout(2, 2));
@@ -169,7 +165,8 @@ public class FactoryGUI extends JFrame
             @Override
             public void windowClosing(WindowEvent e)
             {
-                System.out.println("Exiting...");
+                System.out.println("Shutting down...");
+                threadPool.shutdown();
                 System.exit(0);
             }
         });
@@ -185,11 +182,9 @@ public class FactoryGUI extends JFrame
         return slider;
     }
 
-    private JTextField createCapacityField(Storage<?> storage)
+    private JLabel createCapacityLabel(Storage<?> storage)
     {
-        JTextField field = new JTextField(String.valueOf(storage.getCapacity()), 5);
-        field.addActionListener(e -> storage.setCapacity(Integer.parseInt(field.getText())));
-        return field;
+        return new JLabel(String.valueOf(storage.getCapacity()));
     }
 
     private void updateLabels()
