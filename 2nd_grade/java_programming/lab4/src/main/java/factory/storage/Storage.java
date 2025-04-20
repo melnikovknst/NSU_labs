@@ -6,9 +6,8 @@ import java.util.Queue;
 
 public class Storage<T>
 {
-    private int capacity;
+    private final int capacity;
     private final Queue<T> items = new LinkedList<>();
-    private final Object monitor = new Object();
 
     public Storage(int capacity)
     {
@@ -17,34 +16,34 @@ public class Storage<T>
 
     public void put(T item) throws InterruptedException
     {
-        synchronized (monitor)
+        synchronized (this)
         {
             while (items.size() >= capacity)
             {
-                monitor.wait();
+                this.wait();
             }
             items.add(item);
-            monitor.notifyAll();
+            this.notifyAll();
         }
     }
 
     public T take() throws InterruptedException
     {
-        synchronized (monitor)
+        synchronized (this)
         {
             while (items.isEmpty())
             {
-                monitor.wait();
+                this.wait();
             }
             T item = items.poll();
-            monitor.notifyAll();
+            this.notifyAll();
             return item;
         }
     }
 
     public int getSize()
     {
-        synchronized (monitor)
+        synchronized (this)
         {
             return items.size();
         }
@@ -53,14 +52,5 @@ public class Storage<T>
     public int getCapacity()
     {
         return capacity;
-    }
-
-    public void setCapacity(int newCapacity)
-    {
-        synchronized (monitor)
-        {
-            this.capacity = newCapacity;
-            monitor.notifyAll();
-        }
     }
 }
