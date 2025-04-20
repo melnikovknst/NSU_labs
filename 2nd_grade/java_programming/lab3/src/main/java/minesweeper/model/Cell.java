@@ -1,7 +1,6 @@
 package minesweeper.model;
 
 public class Cell {
-    private boolean isMine;
     private boolean isRevealed;
     private boolean isFlagged;
     private boolean incorrectFlag;
@@ -9,20 +8,10 @@ public class Cell {
 
 
     public Cell() {
-        this.isMine = false;
         this.isRevealed = false;
         this.isFlagged = false;
         this.incorrectFlag = false;
         this.surroundingMines = 0;
-    }
-
-    public boolean isMine() {
-        return isMine;
-    }
-
-    public void setMine() {
-        isMine = true;
-        this.surroundingMines = 1;
     }
 
     public boolean isRevealed() {

@@ -33,6 +33,13 @@ public class Minefield {
         }
     }
 
+    public boolean isMine(int r, int c) {
+        Cell cell = grid[r][c];
+        if ((isGameOver() || isGameWon()) || cell.isRevealed()) return mineMatrix[r][c];
+
+        return false;
+    }
+
     public void generateMines(int excludeRow, int excludeCol) {
         Random random = new Random();
         int placedMines = 0;
@@ -56,14 +63,14 @@ public class Minefield {
 
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
-                if (grid[r][c].isMine()) continue;
+                if (mineMatrix[r][c]) continue;
 
                 int mineCount = 0;
                 for (int i = 0; i < 8; i++) {
                     int nr = r + dx[i];
                     int nc = c + dy[i];
 
-                    if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && grid[nr][nc].isMine()) {
+                    if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && mineMatrix[nr][nc]) {
                         mineCount++;
                     }
                 }
@@ -90,7 +97,7 @@ public class Minefield {
             return true;
         }
 
-        if (cell.isMine()) {
+        if (mineMatrix[row][col]) {
             gameOver = true;
             cell.reveal();
             markIncorrectFlags();
@@ -146,7 +153,7 @@ public class Minefield {
                     flaggedCells++;
                 }
 
-                if (!cell.isMine() && !cell.isRevealed()) {
+                if (!mineMatrix[r][c] && !cell.isRevealed()) {
                     allSafeCellsRevealed = false;
                 }
             }
@@ -171,7 +178,7 @@ public class Minefield {
                 if (!neighbor.isRevealed() && !neighbor.isFlagged()) {
                     neighbor.reveal();
 
-                    if (neighbor.isMine()) {
+                    if (mineMatrix[nr][nc]) {
                         gameOver = true;
                         markIncorrectFlags();
                         return;
@@ -191,14 +198,14 @@ public class Minefield {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 Cell cell = grid[r][c];
-                if (cell.isFlagged() && !cell.isMine()) {
+                if (cell.isFlagged() && !mineMatrix[r][c]) {
                     cell.setIncorrectFlag(true);
                 }
             }
         }
     }
 
-    public int countFlaggedNeighbors(int row, int col) {
+    private int countFlaggedNeighbors(int row, int col) {
         int count = 0;
         int[] dx = {-1, -1, -1, 0, 0, 1, 1, 1};
         int[] dy = {-1, 0, 1, -1, 1, -1, 0, 1};

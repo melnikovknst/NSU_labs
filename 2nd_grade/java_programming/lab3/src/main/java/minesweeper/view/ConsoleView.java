@@ -108,7 +108,7 @@ public class ConsoleView {
                     System.out.print("X ");
                 } else if (cell.isFlagged()) {
                     System.out.print("P ");
-                } else if (minefield.isGameOver() && cell.isMine()) {
+                } else if (minefield.isMine(r, c)) {
                     if (!cell.isRevealed()) {
                         System.out.print("o ");
                     } else {

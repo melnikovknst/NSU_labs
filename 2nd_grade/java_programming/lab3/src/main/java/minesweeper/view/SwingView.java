@@ -60,18 +60,41 @@ public class SwingView extends JFrame {
                 final int col = c;
 
                 button.addMouseListener(new MouseAdapter() {
+                    private boolean buttonPressed = false;
+                    private boolean cursorOnButton = true;
+
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        try {
-                            if (SwingUtilities.isRightMouseButton(e)) {
-                                controller.toggleFlag(row, col);
-                            } else if (SwingUtilities.isLeftMouseButton(e) && !controller.revealCell(row, col)) {
-                                buttons[row][col].setIcon(resizeIcon(explosionIcon, button));
-                            }
-                        } catch (InvalidInputException err) {
-                            System.out.println(err.getMessage());
+                        if (SwingUtilities.isLeftMouseButton(e) || SwingUtilities.isRightMouseButton(e)) {
+                            buttonPressed = true;
                         }
-                        updateField();
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+                        if (buttonPressed && cursorOnButton) {
+                            try {
+                                if (SwingUtilities.isRightMouseButton(e)) {
+                                    minefield.toggleFlag(row, col);
+                                } else if (SwingUtilities.isLeftMouseButton(e) && !controller.revealCell(row, col)) {
+                                    buttons[row][col].setIcon(resizeIcon(explosionIcon, button));
+                                }
+                            } catch (InvalidInputException err) {
+                                System.out.println(err.getMessage());
+                            }
+                            updateField();
+                        }
+                        buttonPressed = false;
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        cursorOnButton = false;
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        cursorOnButton = true;
                     }
                 });
 
@@ -112,12 +135,12 @@ public class SwingView extends JFrame {
                     button.setText(count > 0 ? String.valueOf(count) : "");
 
                 } else if (cell.isFlagged()) {
-                    if (controller.isGameOver() && !cell.isMine()) {
+                    if (minefield.isMine(r, c)) {
                         button.setIcon(resizeIcon(wrongFlagIcon, button));
                     } else {
                         button.setIcon(resizeIcon(flagIcon, button));
                     }
-                } else if (controller.isGameOver() && cell.isMine() && !cell.isRevealed()) {
+                } else if (minefield.isMine(r, c) && !cell.isRevealed()) {
                     button.setIcon(resizeIcon(mineIcon, button));
                 } else {
                     button.setIcon(null);
@@ -127,7 +150,7 @@ public class SwingView extends JFrame {
         }
 
 
-        if (controller.isGameWon()) {
+        if (minefield.isGameWon()) {
             String playerName = JOptionPane.showInputDialog(this, "Congratulations! Enter your name for the high score list:");
             if (playerName != null && !playerName.trim().isEmpty()) {
                 int timeElapsed = controller.getElapsedTime();
@@ -144,7 +167,7 @@ public class SwingView extends JFrame {
             showGameOverDialog();
         }
 
-        if (controller.isGameOver()) {
+        if (minefield.isGameOver()) {
             showGameOverDialog();
         }
     }
