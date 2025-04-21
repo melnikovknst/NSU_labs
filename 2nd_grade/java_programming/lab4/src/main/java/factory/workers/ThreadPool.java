@@ -11,7 +11,6 @@ public class ThreadPool
     private final Queue<Runnable> taskQueue = new LinkedList<>();
     private boolean isRunning = true;
     private int workerCount;
-    private final Object monitor = new Object();
 
     public ThreadPool(int workerCount)
     {
@@ -20,10 +19,10 @@ public class ThreadPool
 
     public void submitTask(Runnable task)
     {
-        synchronized (monitor)
+        synchronized (this)
         {
             taskQueue.add(task);
-            monitor.notify();
+            this.notify();
         }
     }
 
@@ -34,7 +33,7 @@ public class ThreadPool
             throw new InvalidThreadPoolSizeException(newCount);
         }
 
-        synchronized (monitor)
+        synchronized (this)
         {
             if (workers != null)
             {
@@ -56,11 +55,11 @@ public class ThreadPool
                         while (isRunning)
                         {
                             Runnable task;
-                            synchronized (monitor)
+                            synchronized (this)
                             {
-                                if (taskQueue.isEmpty())
+                                while (taskQueue.isEmpty() && isRunning)
                                 {
-                                    monitor.wait();
+                                    this.wait();
                                 }
                                 if (!isRunning)
                                 {
@@ -99,9 +98,9 @@ public class ThreadPool
     public void shutdown()
     {
         isRunning = false;
-        synchronized (monitor)
+        synchronized (this)
         {
-            monitor.notify();
+            this.notifyAll();
         }
         for (Thread worker : workers)
         {
