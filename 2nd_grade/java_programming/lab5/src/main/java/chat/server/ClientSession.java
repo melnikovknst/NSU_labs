@@ -5,8 +5,9 @@ import java.time.Instant;
 
 public class ClientSession {
     private final Socket socket;
-    private final String name;
+    private String name;
     private Instant lastSeen;
+    private String sessionId;
 
     public ClientSession(Socket socket, String name) {
         this.socket = socket;
@@ -28,5 +29,17 @@ public class ClientSession {
 
     public boolean isTimedOut() {
         return Instant.now().minusSeconds(30).isAfter(lastSeen);
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public String getSessionId() {
+        return sessionId;
     }
 }
