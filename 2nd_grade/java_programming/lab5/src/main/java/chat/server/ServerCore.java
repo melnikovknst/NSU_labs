@@ -1,5 +1,6 @@
 package chat.server;
 
+import chat.protocol.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -10,17 +11,10 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Map;
-import java.util.UUID;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
-
-import chat.protocol.*;
+import java.util.logging.*;
+import java.util.stream.Collectors;
 
 public class ServerCore {
     private final int port;
@@ -86,38 +80,47 @@ public class ServerCore {
                         session.setSessionId(sessionId);
 
                         SuccessResponse response = new SuccessResponse(sessionId);
-                        byte[] responseBytes = mapper.writeValueAsBytes(response);
-                        sendWithLengthPrefix(out, responseBytes);
+                        sendJson(out, mapper, response);
 
+                        broadcastUserEvent(mapper, "userlogin", session.getName());
                         log("User logged in: " + login.name);
-                    } else {
-                        if ("message".equals(command)) {
-                            MessageCommand msgCmd = mapper.treeToValue(root, MessageCommand.class);
-                            ClientSession sender = findBySessionId(msgCmd.session);
-                            if (sender == null) {
-                                sendError(out, mapper, "Invalid session");
-                                continue;
-                            }
 
-                            broadcastMessage(mapper, msgCmd.message, sender.getName());
-                            log("Message from " + sender.getName() + ": " + msgCmd.message);
-
-                        } else if ("list".equals(command)) {
-                            ListCommand listCmd = mapper.treeToValue(root, ListCommand.class);
-                            ClientSession sender = findBySessionId(listCmd.session);
-                            if (sender == null) {
-                                sendError(out, mapper, "Invalid session");
-                                continue;
-                            }
-
-                            List<UserInfo> users = clients.values().stream()
-                                    .map(c -> new UserInfo(c.getName(), "java-server"))
-                                    .collect(Collectors.toList());
-
-                            ListUsersResponse response = new ListUsersResponse(users);
-                            byte[] responseBytes = mapper.writeValueAsBytes(response);
-                            sendWithLengthPrefix(out, responseBytes);
+                    } else if ("message".equals(command)) {
+                        MessageCommand msgCmd = mapper.treeToValue(root, MessageCommand.class);
+                        ClientSession sender = findBySessionId(msgCmd.session);
+                        if (sender == null) {
+                            sendError(out, mapper, "Invalid session");
+                            continue;
                         }
+
+                        broadcastMessage(mapper, msgCmd.message, sender.getName());
+                        log("Message from " + sender.getName() + ": " + msgCmd.message);
+
+                    } else if ("list".equals(command)) {
+                        ListCommand listCmd = mapper.treeToValue(root, ListCommand.class);
+                        ClientSession sender = findBySessionId(listCmd.session);
+                        if (sender == null) {
+                            sendError(out, mapper, "Invalid session");
+                            continue;
+                        }
+
+                        List<UserInfo> users = clients.values().stream()
+                                .map(c -> new UserInfo(c.getName(), "java-server"))
+                                .collect(Collectors.toList());
+
+                        ListUsersResponse response = new ListUsersResponse(users);
+                        sendJson(out, mapper, response);
+
+                    } else if ("logout".equals(command)) {
+                        ClientSession sender = findBySessionId(root.path("session").asText());
+                        if (sender != null) {
+                            clients.remove(sender.getSocket());
+                            sender.getSocket().close();
+                            broadcastUserEvent(mapper, "userlogout", sender.getName());
+                            log("User logged out: " + sender.getName());
+                        }
+                    } else {
+                        sendError(out, mapper, "Unsupported command: " + command);
                     }
                 }
                 Thread.sleep(50);
@@ -130,13 +133,19 @@ public class ServerCore {
         }
     }
 
-    private ClientSession findBySessionId(String sessionId) {
-        for (ClientSession session : clients.values()) {
-            if (sessionId.equals(session.getSessionId())) {
-                return session;
+    private void broadcastUserEvent(ObjectMapper mapper, String eventName, String user) {
+        try {
+            String json = mapper.writeValueAsString(Map.of(
+                    "event", Map.of(
+                            "name", eventName,
+                            "user", user
+                    )
+            ));
+            byte[] data = json.getBytes();
+            for (ClientSession s : clients.values()) {
+                sendWithLengthPrefix(s.getSocket().getOutputStream(), data);
             }
-        }
-        return null;
+        } catch (IOException ignored) {}
     }
 
     private void broadcastMessage(ObjectMapper mapper, String msg, String from) {
@@ -155,10 +164,23 @@ public class ServerCore {
         } catch (IOException ignored) {}
     }
 
+    private void sendJson(OutputStream out, ObjectMapper mapper, Object obj) throws IOException {
+        byte[] responseBytes = mapper.writeValueAsBytes(obj);
+        sendWithLengthPrefix(out, responseBytes);
+    }
+
+    private ClientSession findBySessionId(String sessionId) {
+        for (ClientSession session : clients.values()) {
+            if (sessionId.equals(session.getSessionId())) {
+                return session;
+            }
+        }
+        return null;
+    }
+
     private void sendError(OutputStream out, ObjectMapper mapper, String msg) throws IOException {
         ErrorResponse error = new ErrorResponse(msg);
-        byte[] responseBytes = mapper.writeValueAsBytes(error);
-        sendWithLengthPrefix(out, responseBytes);
+        sendJson(out, mapper, error);
     }
 
     private void sendWithLengthPrefix(OutputStream out, byte[] data) throws IOException {
@@ -174,13 +196,30 @@ public class ServerCore {
             for (ClientSession session : clients.values()) {
                 if (session.isTimedOut()) {
                     try {
+                        sendSessionTimeout(session);
+                        broadcastUserEvent(new ObjectMapper(), "userlogout", session.getName());
                         session.getSocket().close();
                         log("Session timeout: " + session.getSocket().getRemoteSocketAddress());
                     } catch (IOException ignored) {}
                 }
+
             }
         }, 30, 1, TimeUnit.SECONDS);
     }
+
+    private void sendSessionTimeout(ClientSession session) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(Map.of(
+                    "event", Map.of(
+                            "name", "sessiontimeout"
+                    )
+            ));
+            byte[] data = json.getBytes();
+            sendWithLengthPrefix(session.getSocket().getOutputStream(), data);
+        } catch (IOException ignored) {}
+    }
+
 
     public void log(String message) {
         if (loggingEnabled) {
