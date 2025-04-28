@@ -24,6 +24,7 @@ public class ServerCore {
     private static final String LOG_FOLDER = "logs/";
 
     private final Map<Socket, ClientSession> clients = new ConcurrentHashMap<>();
+    private final List<String> recentMessages = Collections.synchronizedList(new LinkedList<>());
 
     public ServerCore(int port, boolean loggingEnabled) {
         this.port = port;
@@ -84,14 +85,24 @@ public class ServerCore {
                         SuccessResponse response = new SuccessResponse(sessionId);
                         sendJson(out, mapper, response);
 
+                        // Отправляем историю сообщений
+                        synchronized (recentMessages) {
+                            for (String oldMessage : recentMessages) {
+                                String jsonOld = mapper.writeValueAsString(Map.of(
+                                        "event", Map.of(
+                                                "name", "message",
+                                                "from", "history",
+                                                "message", oldMessage
+                                        )
+                                ));
+                                byte[] oldData = jsonOld.getBytes();
+                                sendWithLengthPrefix(out, oldData);
+                            }
+                        }
+
                         broadcastUserEvent(mapper, "userlogin", session.getName());
                         log("User logged in: " + login.name);
 
-                    } else if ("keeponse".equals(command)) {
-                        ClientSession sender = findBySessionId(root.path("session").asText());
-                        if (sender != null) {
-                            sender.setWaitingKeepAlive(false);
-                        }
                     } else if ("message".equals(command)) {
                         MessageCommand msgCmd = mapper.treeToValue(root, MessageCommand.class);
                         ClientSession sender = findBySessionId(msgCmd.session);
@@ -126,6 +137,11 @@ public class ServerCore {
                             sender.getSocket().close();
                             log("User logged out: " + sender.getName());
                         }
+                    } else if ("keeponse".equals(command)) {
+                        ClientSession sender = findBySessionId(root.path("session").asText());
+                        if (sender != null) {
+                            sender.setWaitingKeepAlive(false);
+                        }
                     } else {
                         sendError(out, mapper, "Unsupported command: " + command);
                     }
@@ -140,6 +156,31 @@ public class ServerCore {
         }
     }
 
+    private void broadcastMessage(ObjectMapper mapper, String msg, String from) {
+        try {
+            String json = mapper.writeValueAsString(Map.of(
+                    "event", Map.of(
+                            "name", "message",
+                            "message", msg,
+                            "from", from
+                    )
+            ));
+            byte[] data = json.getBytes();
+            for (ClientSession s : clients.values()) {
+                sendWithLengthPrefix(s.getSocket().getOutputStream(), data);
+            }
+
+            // Сохраняем в историю
+            synchronized (recentMessages) {
+                recentMessages.add(from + ": " + msg);
+                if (recentMessages.size() > 20) {
+                    recentMessages.remove(0);
+                }
+            }
+
+        } catch (IOException ignored) {}
+    }
+
     private void startTimeoutChecker() {
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
             Instant now = Instant.now();
@@ -147,38 +188,25 @@ public class ServerCore {
                 if (now.minusSeconds(30).isAfter(session.getLastSeen())) {
                     try {
                         sendSessionTimeout(session);
-                        broadcastUserEvent(new ObjectMapper(), "userlogout", session.getName());
+                        clients.remove(session.getSocket());
                         session.getSocket().close();
-                        log("Session timeout: " + session.getSocket().getRemoteSocketAddress());
+                        broadcastUserEvent(new ObjectMapper(), "userlogout", session.getName());
+                        log("Session timeout: " + session.getName());
                     } catch (IOException ignored) {}
                 }
             }
         }, 1, 1, TimeUnit.SECONDS);
     }
 
-    private void sendSessionTimeout(ClientSession session) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            String json = mapper.writeValueAsString(Map.of(
-                    "event", Map.of(
-                            "name", "sessiontimeout"
-                    )
-            ));
-            byte[] data = json.getBytes();
-            sendWithLengthPrefix(session.getSocket().getOutputStream(), data);
-        } catch (IOException ignored) {}
-    }
-
     private void startKeepAliveSender() {
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
             ObjectMapper mapper = new ObjectMapper();
-            Instant now = Instant.now();
             for (ClientSession session : clients.values()) {
                 try {
                     if (session.isWaitingKeepAlive()) {
-                        clients.remove(session.getSocket()); // 1. Сначала убираем клиента
-                        session.getSocket().close();          // 2. Закрываем сокет
-                        broadcastUserEvent(mapper, "userlogout", session.getName()); // 3. Шлём другим
+                        clients.remove(session.getSocket());
+                        session.getSocket().close();
+                        broadcastUserEvent(mapper, "userlogout", session.getName());
                         log("No keeponse. Disconnected: " + session.getName());
                     } else {
                         String json = mapper.writeValueAsString(Map.of(
@@ -198,12 +226,22 @@ public class ServerCore {
                         log("KeepAlive send failed. Disconnected: " + session.getName());
                     } catch (IOException ignored) {}
                 }
-
             }
-        }, 5, 5, TimeUnit.SECONDS);
+        }, 2, 2, TimeUnit.SECONDS);
     }
 
-
+    private void sendSessionTimeout(ClientSession session) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(Map.of(
+                    "event", Map.of(
+                            "name", "sessiontimeout"
+                    )
+            ));
+            byte[] data = json.getBytes();
+            sendWithLengthPrefix(session.getSocket().getOutputStream(), data);
+        } catch (IOException ignored) {}
+    }
 
     private void broadcastUserEvent(ObjectMapper mapper, String eventName, String user) {
         try {
@@ -211,22 +249,6 @@ public class ServerCore {
                     "event", Map.of(
                             "name", eventName,
                             "user", user
-                    )
-            ));
-            byte[] data = json.getBytes();
-            for (ClientSession s : clients.values()) {
-                sendWithLengthPrefix(s.getSocket().getOutputStream(), data);
-            }
-        } catch (IOException ignored) {}
-    }
-
-    private void broadcastMessage(ObjectMapper mapper, String msg, String from) {
-        try {
-            String json = mapper.writeValueAsString(Map.of(
-                    "event", Map.of(
-                            "name", "message",
-                            "message", msg,
-                            "from", from
                     )
             ));
             byte[] data = json.getBytes();
