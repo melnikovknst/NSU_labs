@@ -11,6 +11,7 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.logging.*;
@@ -42,6 +43,7 @@ public class ServerCore {
         ServerSocket serverSocket = new ServerSocket(port);
         log("Server started on port " + port);
         startTimeoutChecker();
+        startKeepAliveSender();
 
         while (true) {
             Socket clientSocket = serverSocket.accept();
@@ -85,6 +87,11 @@ public class ServerCore {
                         broadcastUserEvent(mapper, "userlogin", session.getName());
                         log("User logged in: " + login.name);
 
+                    } else if ("keeponse".equals(command)) {
+                        ClientSession sender = findBySessionId(root.path("session").asText());
+                        if (sender != null) {
+                            sender.setWaitingKeepAlive(false);
+                        }
                     } else if ("message".equals(command)) {
                         MessageCommand msgCmd = mapper.treeToValue(root, MessageCommand.class);
                         ClientSession sender = findBySessionId(msgCmd.session);
@@ -114,9 +121,9 @@ public class ServerCore {
                     } else if ("logout".equals(command)) {
                         ClientSession sender = findBySessionId(root.path("session").asText());
                         if (sender != null) {
+                            broadcastUserEvent(mapper, "userlogout", sender.getName());
                             clients.remove(sender.getSocket());
                             sender.getSocket().close();
-                            broadcastUserEvent(mapper, "userlogout", sender.getName());
                             log("User logged out: " + sender.getName());
                         }
                     } else {
@@ -132,6 +139,71 @@ public class ServerCore {
             log("Client removed: " + session.getSocket().getRemoteSocketAddress());
         }
     }
+
+    private void startTimeoutChecker() {
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
+            Instant now = Instant.now();
+            for (ClientSession session : clients.values()) {
+                if (now.minusSeconds(30).isAfter(session.getLastSeen())) {
+                    try {
+                        sendSessionTimeout(session);
+                        broadcastUserEvent(new ObjectMapper(), "userlogout", session.getName());
+                        session.getSocket().close();
+                        log("Session timeout: " + session.getSocket().getRemoteSocketAddress());
+                    } catch (IOException ignored) {}
+                }
+            }
+        }, 1, 1, TimeUnit.SECONDS);
+    }
+
+    private void sendSessionTimeout(ClientSession session) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(Map.of(
+                    "event", Map.of(
+                            "name", "sessiontimeout"
+                    )
+            ));
+            byte[] data = json.getBytes();
+            sendWithLengthPrefix(session.getSocket().getOutputStream(), data);
+        } catch (IOException ignored) {}
+    }
+
+    private void startKeepAliveSender() {
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
+            ObjectMapper mapper = new ObjectMapper();
+            Instant now = Instant.now();
+            for (ClientSession session : clients.values()) {
+                try {
+                    if (session.isWaitingKeepAlive()) {
+                        clients.remove(session.getSocket()); // 1. Сначала убираем клиента
+                        session.getSocket().close();          // 2. Закрываем сокет
+                        broadcastUserEvent(mapper, "userlogout", session.getName()); // 3. Шлём другим
+                        log("No keeponse. Disconnected: " + session.getName());
+                    } else {
+                        String json = mapper.writeValueAsString(Map.of(
+                                "event", Map.of(
+                                        "name", "keepalive"
+                                )
+                        ));
+                        byte[] data = json.getBytes();
+                        sendWithLengthPrefix(session.getSocket().getOutputStream(), data);
+                        session.setWaitingKeepAlive(true);
+                    }
+                } catch (IOException e) {
+                    try {
+                        clients.remove(session.getSocket());
+                        session.getSocket().close();
+                        broadcastUserEvent(mapper, "userlogout", session.getName());
+                        log("KeepAlive send failed. Disconnected: " + session.getName());
+                    } catch (IOException ignored) {}
+                }
+
+            }
+        }, 5, 5, TimeUnit.SECONDS);
+    }
+
+
 
     private void broadcastUserEvent(ObjectMapper mapper, String eventName, String user) {
         try {
@@ -190,36 +262,6 @@ public class ServerCore {
         out.write(buffer.array());
         out.flush();
     }
-
-    private void startTimeoutChecker() {
-        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
-            for (ClientSession session : clients.values()) {
-                if (session.isTimedOut()) {
-                    try {
-                        sendSessionTimeout(session);
-                        broadcastUserEvent(new ObjectMapper(), "userlogout", session.getName());
-                        session.getSocket().close();
-                        log("Session timeout: " + session.getSocket().getRemoteSocketAddress());
-                    } catch (IOException ignored) {}
-                }
-
-            }
-        }, 30, 1, TimeUnit.SECONDS);
-    }
-
-    private void sendSessionTimeout(ClientSession session) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            String json = mapper.writeValueAsString(Map.of(
-                    "event", Map.of(
-                            "name", "sessiontimeout"
-                    )
-            ));
-            byte[] data = json.getBytes();
-            sendWithLengthPrefix(session.getSocket().getOutputStream(), data);
-        } catch (IOException ignored) {}
-    }
-
 
     public void log(String message) {
         if (loggingEnabled) {

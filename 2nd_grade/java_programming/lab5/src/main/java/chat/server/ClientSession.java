@@ -27,8 +27,8 @@ public class ClientSession {
         lastSeen = Instant.now();
     }
 
-    public boolean isTimedOut() {
-        return Instant.now().minusSeconds(30).isAfter(lastSeen);
+    public Instant getLastSeen() {
+        return lastSeen;
     }
 
     public void setName(String name) {
@@ -41,5 +41,15 @@ public class ClientSession {
 
     public String getSessionId() {
         return sessionId;
+    }
+
+    private boolean waitingKeepAlive = false;
+
+    public void setWaitingKeepAlive(boolean waiting) {
+        this.waitingKeepAlive = waiting;
+    }
+
+    public boolean isWaitingKeepAlive() {
+        return waitingKeepAlive;
     }
 }

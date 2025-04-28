@@ -120,7 +120,10 @@ public class ChatWindow extends JFrame {
                             String message = (String) event.get("message");
                             chatArea.append(from + ": " + message + "\n");
 
-                        } else if ("userlogin".equals(eventName)) {
+                        } else if ("keepalive".equals(eventName)) {
+                            sendKeepAliveResponse();
+                        }
+                        else if ("userlogin".equals(eventName)) {
                             String user = (String) event.get("user");
                             chatArea.append("* " + user + " connected *\n");
                             sendListRequest();
@@ -153,10 +156,10 @@ public class ChatWindow extends JFrame {
 
         for (Map<String, Object> user : users) {
             JLabel label = new JLabel((String) user.get("name"));
-            label.setAlignmentX(Component.CENTER_ALIGNMENT);
+            label.setAlignmentX(Component.LEFT_ALIGNMENT);
             userPanel.add(label);
-            userPanel.add(new JSeparator());
         }
+
         userPanel.revalidate();
         userPanel.repaint();
     }
@@ -182,4 +185,18 @@ public class ChatWindow extends JFrame {
         dispose();
         new LoginDialog();
     }
+
+    private void sendKeepAliveResponse() {
+        try {
+            Map<String, Object> response = Map.of(
+                    "command", "keeponse",
+                    "session", sessionId
+            );
+            byte[] data = networkManager.getMapper().writeValueAsBytes(response);
+            networkManager.sendWithLengthPrefix(data);
+        } catch (IOException e) {
+            chatArea.append("Failed to send keeponse: " + e.getMessage() + "\n");
+        }
+    }
+
 }
