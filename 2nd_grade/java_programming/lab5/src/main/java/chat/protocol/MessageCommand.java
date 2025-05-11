@@ -1,6 +1,8 @@
 package chat.protocol;
 
-public class MessageCommand {
+import java.io.Serializable;
+
+public class MessageCommand implements Serializable {
     public String command;
     public String message;
     public String session;

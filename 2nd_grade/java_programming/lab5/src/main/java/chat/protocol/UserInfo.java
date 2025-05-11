@@ -1,6 +1,8 @@
 package chat.protocol;
 
-public class UserInfo {
+import java.io.Serializable;
+
+public class UserInfo implements Serializable {
     public String name;
     public String type;
 

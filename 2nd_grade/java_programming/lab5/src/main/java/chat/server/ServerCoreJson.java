@@ -17,7 +17,7 @@ import java.util.concurrent.*;
 import java.util.logging.*;
 import java.util.stream.Collectors;
 
-public class ServerCore {
+public class ServerCoreJson {
     private final int port;
     private final boolean loggingEnabled;
     private final Logger logger = Logger.getLogger("ChatServer");
@@ -26,7 +26,7 @@ public class ServerCore {
     private final Map<Socket, ClientSession> clients = new ConcurrentHashMap<>();
     private final List<String> recentMessages = Collections.synchronizedList(new LinkedList<>());
 
-    public ServerCore(int port, boolean loggingEnabled) {
+    public ServerCoreJson(int port, boolean loggingEnabled) {
         this.port = port;
         this.loggingEnabled = loggingEnabled;
         if (loggingEnabled) {

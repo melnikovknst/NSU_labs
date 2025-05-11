@@ -24,8 +24,17 @@ public class ServerApp {
 
             int port = (int) config.get("port");
             boolean logging = (boolean) config.get("logging");
+            String protocol = (String) config.get("protocol");
 
-            new ServerCore(port, logging).start();
+            System.out.println("[MODE: " + protocol.toUpperCase() + "] Server starting on port " + port);
+
+            if ("json".equalsIgnoreCase(protocol)) {
+                new ServerCoreJson(port, logging).start();
+            } else if ("object".equalsIgnoreCase(protocol)) {
+                new ServerCoreObject(port, logging).start();
+            } else {
+                System.out.println("Unknown protocol: " + protocol);
+            }
 
         } catch (IOException e) {
             System.out.println(e.getMessage());

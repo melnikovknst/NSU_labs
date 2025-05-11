@@ -1,6 +1,8 @@
 package chat.protocol;
 
-public class SuccessResponse {
+import java.io.Serializable;
+
+public class SuccessResponse implements Serializable {
     public boolean success = true;
     public String session;
 
