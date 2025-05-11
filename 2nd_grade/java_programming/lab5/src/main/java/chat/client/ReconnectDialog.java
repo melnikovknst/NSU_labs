@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ReconnectDialog extends JFrame {
-    public ReconnectDialog(String userName, String host, int port) {
+    public ReconnectDialog(String userName, String host, int port, String protocol) {
         setTitle("Disconnected");
         setSize(300, 150);
         setLocationRelativeTo(null);
@@ -18,23 +18,27 @@ public class ReconnectDialog extends JFrame {
 
         reconnectButton.addActionListener(e -> {
             try {
-                NetworkManager manager = new NetworkManager(host, port);
-                String sessionId = manager.login(userName);
-                new ChatWindow(manager, userName, sessionId);
+                if ("json".equals(protocol)) {
+                    new ChatWindowJson(userName, host, port);
+                } else if ("object".equals(protocol)) {
+                    new ChatWindowObject(userName, host, port);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Unsupported protocol: " + protocol);
+                    new LoginDialog(null).setVisible(true);
+                }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Reconnect failed: " + ex.getMessage());
-                new LoginDialog();
+                new LoginDialog(null).setVisible(true);
             }
             dispose();
         });
 
         mainMenuButton.addActionListener(e -> {
-            new LoginDialog();
+            new LoginDialog(null).setVisible(true);
             dispose();
         });
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(1, 2));
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
         buttonPanel.add(reconnectButton);
         buttonPanel.add(mainMenuButton);
 

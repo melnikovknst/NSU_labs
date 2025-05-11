@@ -3,57 +3,58 @@ package chat.client;
 import javax.swing.*;
 import java.awt.*;
 
-public class LoginDialog extends JFrame {
-    private JTextField nameField;
-    private JTextField hostField;
-    private JTextField portField;
-    private JButton connectButton;
+public class LoginDialog extends JDialog {
+    private final JTextField nameField = new JTextField("user");
+    private final JTextField hostField = new JTextField("localhost");
+    private final JTextField portField = new JTextField("12345");
+    private final JComboBox<String> protocolBox = new JComboBox<>(new String[]{"JSON", "ObjectStream"});
 
-    public LoginDialog() {
-        setTitle("Login");
+    private boolean confirmed = false;
+
+    public LoginDialog(Frame owner) {
+        super(owner, "Login", true);
+        setLayout(new BorderLayout());
+
+        JPanel fields = new JPanel(new GridLayout(4, 2, 5, 5));
+        fields.add(new JLabel("Name:"));
+        fields.add(nameField);
+        fields.add(new JLabel("Host:"));
+        fields.add(hostField);
+        fields.add(new JLabel("Port:"));
+        fields.add(portField);
+        fields.add(new JLabel("Protocol:"));
+        fields.add(protocolBox);
+
+        JButton connectButton = new JButton("Connect");
+        connectButton.addActionListener(e -> {
+            confirmed = true;
+            dispose();
+        });
+
+        add(fields, BorderLayout.CENTER);
+        add(connectButton, BorderLayout.SOUTH);
+
         setSize(300, 200);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        JPanel panel = new JPanel(new GridLayout(7, 1));
-
-        panel.add(new JLabel("Username:"));
-        nameField = new JTextField("Enter your name");
-        panel.add(nameField);
-
-        panel.add(new JLabel("Host:"));
-        hostField = new JTextField("localhost");
-        panel.add(hostField);
-
-        panel.add(new JLabel("Port:"));
-        portField = new JTextField("12345");
-        panel.add(portField);
-
-        connectButton = new JButton("Connect");
-        panel.add(connectButton);
-
-        connectButton.addActionListener(e -> tryConnect());
-
-        add(panel);
-        setVisible(true);
     }
 
-    private void tryConnect() {
-        String name = nameField.getText().trim();
-        String host = hostField.getText().trim();
-        int port = Integer.parseInt(portField.getText().trim());
+    public boolean isConfirmed() {
+        return confirmed;
+    }
 
-        if (name.isEmpty() || host.isEmpty()) return;
+    public String getUserName() {
+        return nameField.getText().trim();
+    }
 
-        try {
-            NetworkManager manager = new NetworkManager(host, port);
-            String sessionId = manager.login(name);
+    public String getHost() {
+        return hostField.getText().trim();
+    }
 
-            new ChatWindow(manager, name, sessionId);
-            dispose();
+    public int getPort() {
+        return Integer.parseInt(portField.getText().trim());
+    }
 
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Connection failed: " + ex.getMessage());
-        }
+    public String getProtocol() {
+        return ((String) protocolBox.getSelectedItem()).toLowerCase();
     }
 }
