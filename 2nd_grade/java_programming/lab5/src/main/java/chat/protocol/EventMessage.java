@@ -3,7 +3,7 @@ package chat.protocol;
 import java.io.Serializable;
 
 public class EventMessage implements Serializable {
-    public String name = "message";
+    public String command = "message";
     public String from;
     public String message;
 

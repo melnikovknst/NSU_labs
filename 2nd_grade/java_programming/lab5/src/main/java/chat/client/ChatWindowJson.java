@@ -1,7 +1,6 @@
 package chat.client;
 
 import chat.protocol.*;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.swing.*;
@@ -25,6 +24,8 @@ public class ChatWindowJson extends JFrame {
     private final ObjectMapper mapper = new ObjectMapper();
     private final String sessionId;
     private final String userName;
+    private boolean isExiting = false;
+
 
     public ChatWindowJson(String userName, String host, int port) throws Exception {
         this.userName = userName;
@@ -42,41 +43,59 @@ public class ChatWindowJson extends JFrame {
         if (response.containsKey("error")) {
             throw new RuntimeException("Login failed: " + response.get("error"));
         }
-        this.sessionId = ((Map<?, ?>) response.get("success")).get("session").toString();
+
+        this.sessionId = response.get("session").toString();
+        System.out.println("id: " + this.sessionId);
+
+        // запрос списка
+        requestUserList();
 
         setupUI();
+        System.out.println("setupUI() called");
         startListening();
     }
 
     private void setupUI() {
         setTitle("Chat (JSON) - " + userName);
-        setLayout(new BorderLayout());
+        setSize(600, 400);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         chatArea.setEditable(false);
-        add(new JScrollPane(chatArea), BorderLayout.CENTER);
+        JScrollPane chatScroll = new JScrollPane(chatArea);
 
-        userList.setPreferredSize(new Dimension(150, 0));
-        add(new JScrollPane(userList), BorderLayout.EAST);
+        JButton sendButton = new JButton("Send");
+        JButton exitButton = new JButton("Exit");
 
-        add(inputField, BorderLayout.SOUTH);
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+        bottomPanel.add(inputField, BorderLayout.CENTER);
 
-        inputField.addActionListener(e -> {
-            String msg = inputField.getText().trim();
-            if (!msg.isEmpty()) {
-                MessageCommand cmd = new MessageCommand();
-                cmd.command = "message";
-                cmd.session = sessionId;
-                cmd.message = msg;
-                try {
-                    sendJson(cmd);
-                } catch (Exception ignored) {}
-                inputField.setText("");
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
+        buttonPanel.add(sendButton);
+        buttonPanel.add(exitButton);
+        bottomPanel.add(buttonPanel, BorderLayout.EAST);
+
+        JScrollPane userScroll = new JScrollPane(userList);
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, chatScroll, userScroll);
+        splitPane.setDividerLocation(400);
+
+        add(splitPane, BorderLayout.CENTER);
+        add(bottomPanel, BorderLayout.SOUTH);
+
+        sendButton.addActionListener(e -> sendMessage());
+        inputField.addActionListener(e -> sendMessage());
+        exitButton.addActionListener(e -> {
+            isExiting = true;
+            LogoutCommand logout = new LogoutCommand(sessionId);
+            try {
+                sendJson(logout);
+            } catch (Exception e1) {
+                e1.printStackTrace();
             }
+            dispose();
+            new LoginDialog(null).setVisible(true);;
         });
 
-        setSize(600, 400);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
         setVisible(true);
     }
 
@@ -85,30 +104,43 @@ public class ChatWindowJson extends JFrame {
             try {
                 while (!socket.isClosed()) {
                     Map<?, ?> data = receiveJson();
-                    if (data.containsKey("event")) {
-                        Map<?, ?> event = (Map<?, ?>) data.get("event");
-                        String type = (String) event.get("name");
+                    if (data.containsKey("command")) {
+                        String type = (String) data.get("command");
 
                         switch (type) {
                             case "message" -> {
-                                String from = (String) event.get("from");
-                                String message = (String) event.get("message");
-                                appendMessage(from + ": " + message);
+                                String from = (String) data.get("from");
+                                String msg = (String) data.get("message");
+                                appendMessage(from + ": " + msg);
                             }
                             case "userlogin" -> {
-                                String name = (String) event.get("user");
-                                appendMessage("[joined] " + name);
+                                String user = (String) data.get("user");
+                                appendMessage(user + " joined");
                                 requestUserList();
                             }
                             case "userlogout" -> {
-                                String name = (String) event.get("user");
-                                appendMessage("[left] " + name);
+                                String user = (String) data.get("user");
+                                appendMessage(user + " left");
                                 requestUserList();
                             }
                             case "keepalive" -> {
                                 KeepOnResponse keep = new KeepOnResponse(sessionId);
                                 keep.command = "keeponse";
                                 sendJson(keep);
+                            }
+                            case "history" -> {
+                                String msg = (String) data.get("message");
+                                appendMessage(msg);
+                            }
+                            case "listusers" -> {
+                                SwingUtilities.invokeLater(() -> {
+                                    userListModel.clear();
+                                    Map<String, Object> listusers = (Map<String, Object>) data.get("listusers");
+                                    List<Map<String, Object>> users = (List<Map<String, Object>>) listusers.get("user");
+                                    for (Map<String, Object> user : users) {
+                                        userListModel.addElement((String) user.get("name"));
+                                    }
+                                });
                             }
                             case "sessiontimeout" -> handleConnectionLoss();
                         }
@@ -120,24 +152,33 @@ public class ChatWindowJson extends JFrame {
         }).start();
     }
 
+    private void sendMessage() {
+        String msg = inputField.getText().trim();
+        if (msg.isEmpty()) return;
+
+        MessageCommand message = new MessageCommand();
+        message.command = "message";
+        message.session = sessionId;
+        message.message = msg;
+
+        try {
+            System.out.println("Sending: " + mapper.writeValueAsString(message)); // лог
+            sendJson(message);
+            inputField.setText("");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void requestUserList() {
         try {
             ListCommand cmd = new ListCommand();
             cmd.command = "list";
             cmd.session = sessionId;
             sendJson(cmd);
-
-            Map<?, ?> response = receiveJson();
-            List<Map<String, Object>> users =
-                    (List<Map<String, Object>>) ((Map<?, ?>) response.get("listusers")).get("user");
-
-            SwingUtilities.invokeLater(() -> {
-                userListModel.clear();
-                for (Map<String, Object> u : users) {
-                    userListModel.addElement((String) u.get("name"));
-                }
-            });
-        } catch (Exception ignored) {}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void appendMessage(String msg) {
@@ -148,6 +189,7 @@ public class ChatWindowJson extends JFrame {
     }
 
     private void handleConnectionLoss() {
+        if (isExiting) return;
         SwingUtilities.invokeLater(() -> {
             dispose();
             new ReconnectDialog(userName, socket.getInetAddress().getHostAddress(), socket.getPort(), "json");

@@ -1,18 +1,24 @@
 package chat.server;
 
 import chat.protocol.*;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.Instant;
 import java.util.*;
-import java.util.concurrent.*;
-import java.util.logging.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+import java.util.stream.Collectors;
 
 public class ServerCoreJson {
     private final int port;
@@ -21,8 +27,7 @@ public class ServerCoreJson {
     private static final String LOG_FOLDER = "logs/";
 
     private final Map<Socket, ClientSession> clients = new ConcurrentHashMap<>();
-    private final List<String> recentMessages = Collections.synchronizedList(new LinkedList<>());
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final List<String> history = new ArrayList<>();
 
     public ServerCoreJson(int port, boolean loggingEnabled) {
         this.port = port;
@@ -40,118 +45,102 @@ public class ServerCoreJson {
 
     public void start() throws IOException {
         ServerSocket serverSocket = new ServerSocket(port);
-        log("Server started on port " + port + " [JSON Mode]");
-        startKeepAliveSender();
+        log("Server started on port " + port + " [JSON mode]");
+        startTimeoutChecker();
 
         while (true) {
             Socket clientSocket = serverSocket.accept();
             ClientSession session = new ClientSession(clientSocket, "anon");
             clients.put(clientSocket, session);
             log("Client connected: " + clientSocket.getRemoteSocketAddress());
-
             new Thread(() -> handleClient(session)).start();
         }
     }
 
     private void handleClient(ClientSession session) {
         try (Socket socket = session.getSocket()) {
-            InputStream in = socket.getInputStream();
-            OutputStream out = socket.getOutputStream();
+            var in = socket.getInputStream();
+            var out = socket.getOutputStream();
+            var mapper = new ObjectMapper();
 
             while (!socket.isClosed()) {
                 if (in.available() >= 4) {
                     byte[] lenBuf = in.readNBytes(4);
                     int length = ByteBuffer.wrap(lenBuf).getInt();
                     byte[] body = in.readNBytes(length);
-
                     session.updateLastSeen();
 
                     String json = new String(body);
-                    Map<?, ?> root = mapper.readValue(json, Map.class);
-                    String command = (String) root.get("command");
+                    JsonNode root = mapper.readTree(json);
+                    String command = root.path("command").asText();
+                    System.out.println("SERVER received command: " + command);
 
-                    if ("login".equals(command)) {
-                        LoginCommand login = mapper.readValue(json, LoginCommand.class);
-                        String sessionId = UUID.randomUUID().toString();
 
-                        session.setName(login.name);
-                        session.setSessionId(sessionId);
+                    switch (command) {
+                        case "login" -> {
+                            LoginCommand login = mapper.treeToValue(root, LoginCommand.class);
+                            String sessionId = UUID.randomUUID().toString();
+                            session.setName(login.name);
+                            session.setSessionId(sessionId);
+                            clients.put(session.getSocket(), session);
 
-                        sendJson(out, new SuccessResponse(sessionId));
+                            SuccessResponse response = new SuccessResponse(sessionId);
+                            sendWithLengthPrefix(out, mapper.writeValueAsBytes(response));
 
-                        synchronized (recentMessages) {
-                            for (String msg : recentMessages) {
-                                sendJson(out, new EventMessage("history", msg));
-                            }
+                            sendHistory(out);
+                            broadcast(new EventUser("userlogin", login.name));
+                            sendUserListToAll();
+
+                            log("User logged in: " + login.name);
                         }
 
-                        broadcastToAll(new EventUser("userlogin", login.name));
-                        log("User logged in: " + login.name);
-
-                    } else if ("message".equals(command)) {
-                        MessageCommand msgCmd = mapper.readValue(json, MessageCommand.class);
-                        ClientSession sender = findBySessionId(msgCmd.session);
-                        if (sender == null) {
-                            sendJson(out, new ErrorResponse("Invalid session"));
-                            continue;
+                        case "message" -> {
+                            System.out.println("Session id for message = " + session.getSessionId());
+                            MessageCommand msg = mapper.treeToValue(root, MessageCommand.class);
+                            log("[" + session.getName() + "]: " + msg.message);
+                            history.add(session.getName() + ": " + msg.message);
+                            broadcast(new EventMessage(session.getName(), msg.message));
                         }
 
-                        String formatted = sender.getName() + ": " + msgCmd.message;
-                        synchronized (recentMessages) {
-                            recentMessages.add(formatted);
-                            if (recentMessages.size() > 20) recentMessages.remove(0);
+                        case "keeponse" -> session.updateLastSeen();
+
+                        case "logout" -> {
+                            log(session.getName() + " exited via Exit button");
+                            socket.close();
                         }
 
-                        broadcastToAll(new EventMessage(sender.getName(), msgCmd.message));
-                        log("Message from " + sender.getName() + ": " + msgCmd.message);
-
-                    } else if ("list".equals(command)) {
-                        ListCommand listCmd = mapper.readValue(json, ListCommand.class);
-                        ClientSession sender = findBySessionId(listCmd.session);
-                        if (sender == null) {
-                            sendJson(out, new ErrorResponse("Invalid session"));
-                            continue;
+                        case "list" -> {
+                            ListUsersResponse list = new ListUsersResponse(
+                                    clients.values().stream()
+                                            .filter(s -> s.getSessionId() != null)
+                                            .map(s -> new UserInfo(s.getName()))
+                                            .collect(Collectors.toList())
+                            );
+                            sendWithLengthPrefix(out, mapper.writeValueAsBytes(list));
                         }
 
-                        List<UserInfo> users = clients.values().stream()
-                                .map(c -> new UserInfo(c.getName(), "java-server"))
-                                .toList();
-
-                        sendJson(out, new ListUsersResponse(users));
-
-                    } else if ("logout".equals(command)) {
-                        LogoutCommand logout = mapper.readValue(json, LogoutCommand.class);
-                        ClientSession sender = findBySessionId(logout.session);
-                        if (sender != null) {
-                            clients.remove(sender.getSocket());
-                            sender.getSocket().close();
-                            broadcastToAll(new EventUser("userlogout", sender.getName()));
-                            log("User logged out: " + sender.getName());
+                        default -> {
+                            ErrorResponse err = new ErrorResponse("Unknown command: " + command);
+                            sendWithLengthPrefix(out, mapper.writeValueAsBytes(err));
                         }
-
-                    } else if ("keeponse".equals(command)) {
-                        KeepOnResponse keep = mapper.readValue(json, KeepOnResponse.class);
-                        ClientSession sender = findBySessionId(keep.session);
-                        if (sender != null) {
-                            sender.setWaitingKeepAlive(false);
-                        }
-
-                    } else {
-                        sendJson(out, new ErrorResponse("Unknown command: " + command));
                     }
                 }
+
                 Thread.sleep(50);
             }
         } catch (IOException | InterruptedException e) {
             log("Client error: " + e.getMessage());
         } finally {
             clients.remove(session.getSocket());
+            if (session.getName() != null) {
+                broadcast(new EventUser("userlogout", session.getName()));
+                sendUserListToAll();
+            }
             log("Client removed: " + session.getSocket().getRemoteSocketAddress());
         }
     }
 
-    private void sendJson(OutputStream out, Object obj) throws IOException {
-        byte[] data = mapper.writeValueAsBytes(obj);
+    private void sendWithLengthPrefix(OutputStream out, byte[] data) throws IOException {
         ByteBuffer buffer = ByteBuffer.allocate(4 + data.length);
         buffer.putInt(data.length);
         buffer.put(data);
@@ -159,42 +148,55 @@ public class ServerCoreJson {
         out.flush();
     }
 
-    private void startKeepAliveSender() {
-        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
-            for (ClientSession session : clients.values()) {
+    private void broadcast(Object message) {
+        try {
+            byte[] data = new ObjectMapper().writeValueAsBytes(message);
+            for (ClientSession s : clients.values()) {
                 try {
-                    if (session.isWaitingKeepAlive()) {
-                        clients.remove(session.getSocket());
-                        session.getSocket().close();
-                        broadcastToAll(new EventUser("userlogout", session.getName()));
-                        log("No keeponse. Disconnected: " + session.getName());
-                    } else {
-                        sendJson(session.getSocket().getOutputStream(), new KeepAliveEvent());
-                        session.setWaitingKeepAlive(true);
-                    }
+                    sendWithLengthPrefix(s.getSocket().getOutputStream(), data);
                 } catch (IOException ignored) {}
             }
-        }, 2, 2, TimeUnit.SECONDS);
+        } catch (IOException ignored) {}
     }
 
-    private void broadcastToAll(Object obj) {
-        for (ClientSession s : clients.values()) {
-            try {
-                sendJson(s.getSocket().getOutputStream(), obj);
-            } catch (IOException ignored) {}
-        }
+    private void sendUserListToAll() {
+        List<UserInfo> users = clients.values().stream()
+                .filter(s -> s.getSessionId() != null)
+                .map(s -> new UserInfo(s.getName()))
+                .collect(Collectors.toList());
+        ListUsersResponse list = new ListUsersResponse(users);
+        broadcast(list);
     }
 
-    private ClientSession findBySessionId(String sessionId) {
-        for (ClientSession session : clients.values()) {
-            if (sessionId != null && sessionId.equals(session.getSessionId())) {
-                return session;
+    private void sendHistory(OutputStream out) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            for (String msg : history.stream().skip(Math.max(0, history.size() - 20)).toList()) {
+                String[] parts = msg.split(":", 2);
+                if (parts.length == 2) {
+                    EventMessage historyMsg = new EventMessage(parts[0].trim(), parts[1].trim());
+                    sendWithLengthPrefix(out, mapper.writeValueAsBytes(historyMsg));
+                }
             }
-        }
-        return null;
+        } catch (IOException ignored) {}
     }
 
-    public void log(String message) {
+    private void startTimeoutChecker() {
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
+            for (ClientSession session : clients.values()) {
+                if (session.isTimedOut()) {
+                    try {
+                        session.getSocket().close();
+                        log("No keeponse. Disconnected: " + session.getName());
+                        broadcast(new EventUser("sessiontimeout", session.getName()));
+                        sendUserListToAll();
+                    } catch (IOException ignored) {}
+                }
+            }
+        }, 30, 1, TimeUnit.SECONDS);
+    }
+
+    private void log(String message) {
         if (loggingEnabled) {
             logger.info(message);
         } else {

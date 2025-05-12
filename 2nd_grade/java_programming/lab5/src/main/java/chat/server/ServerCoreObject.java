@@ -103,7 +103,7 @@ public class ServerCoreObject {
                     }
 
                     List<UserInfo> users = clients.values().stream()
-                            .map(c -> new UserInfo(c.getName(), "java-server"))
+                            .map(c -> new UserInfo(c.getName()))
                             .toList();
 
                     out.writeObject(new ListUsersResponse(users));

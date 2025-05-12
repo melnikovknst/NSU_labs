@@ -4,10 +4,8 @@ import java.io.Serializable;
 
 public class UserInfo implements Serializable {
     public String name;
-    public String type;
 
-    public UserInfo(String name, String type) {
+    public UserInfo(String name) {
         this.name = name;
-        this.type = type;
     }
 }

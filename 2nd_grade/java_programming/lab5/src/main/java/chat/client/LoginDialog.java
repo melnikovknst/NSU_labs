@@ -7,7 +7,7 @@ public class LoginDialog extends JDialog {
     private final JTextField nameField = new JTextField("user");
     private final JTextField hostField = new JTextField("localhost");
     private final JTextField portField = new JTextField("12345");
-    private final JComboBox<String> protocolBox = new JComboBox<>(new String[]{"JSON", "ObjectStream"});
+    private final JComboBox<String> protocolBox = new JComboBox<>(new String[]{"JSON", "Object"});
 
     private boolean confirmed = false;
 
@@ -24,6 +24,7 @@ public class LoginDialog extends JDialog {
         fields.add(portField);
         fields.add(new JLabel("Protocol:"));
         fields.add(protocolBox);
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         JButton connectButton = new JButton("Connect");
         connectButton.addActionListener(e -> {

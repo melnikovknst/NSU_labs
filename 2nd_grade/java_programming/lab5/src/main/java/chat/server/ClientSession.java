@@ -52,4 +52,8 @@ public class ClientSession {
     public boolean isWaitingKeepAlive() {
         return waitingKeepAlive;
     }
+
+    public boolean isTimedOut() {
+        return Instant.now().minusSeconds(30).isAfter(lastSeen);
+    }
 }

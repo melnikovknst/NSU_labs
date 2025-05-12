@@ -5,7 +5,7 @@ import java.util.Map;
 import java.io.Serializable;
 
 public class ListUsersResponse  implements Serializable {
-    public boolean success = true;
+    public String command = "listusers";
     public Map<String, List<UserInfo>> listusers;
 
     public ListUsersResponse(List<UserInfo> users) {

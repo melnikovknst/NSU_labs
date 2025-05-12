@@ -78,18 +78,13 @@ public class ChatWindowObject extends JFrame {
                     Object obj = in.readObject();
 
                     if (obj instanceof EventMessage msg) {
-                        if ("history".equals(msg.from)) {
-                            appendMessage(msg.message);
-                        } else {
-                            appendMessage(msg.from + ": " + msg.message);
-                        }
-
+                        appendMessage(msg.message);
                     } else if (obj instanceof EventUser evt) {
-                        if ("userlogin".equals(evt.name)) {
+                        if ("userlogin".equals(evt.command)) {
                             appendMessage("[joined] " + evt.user);
-                        } else if ("userlogout".equals(evt.name)) {
+                        } else if ("userlogout".equals(evt.command)) {
                             appendMessage("[left] " + evt.user);
-                        } else if ("sessiontimeout".equals(evt.name)) {
+                        } else if ("sessiontimeout".equals(evt.command)) {
                             handleConnectionLoss();
                         }
                         requestUserList();
