@@ -6,8 +6,10 @@ import java.time.Instant;
 public class ClientSession {
     private final Socket socket;
     private String name;
-    private Instant lastSeen;
     private String sessionId;
+
+    private Instant lastSeen;
+    private int missedKeepAliveCount = 0;
 
     public ClientSession(Socket socket, String name) {
         this.socket = socket;
@@ -24,11 +26,23 @@ public class ClientSession {
     }
 
     public void updateLastSeen() {
-        lastSeen = Instant.now();
+        this.lastSeen = Instant.now();
     }
 
-    public Instant getLastSeen() {
-        return lastSeen;
+    public boolean isInactive() {
+        return Instant.now().minusSeconds(30).isAfter(lastSeen);
+    }
+
+    public void resetKeepAlive() {
+        missedKeepAliveCount = 0;
+    }
+
+    public void incrementMissedKeepAlive() {
+        missedKeepAliveCount++;
+    }
+
+    public boolean isConnectionLost() {
+        return missedKeepAliveCount >= 10;
     }
 
     public void setName(String name) {
@@ -41,19 +55,5 @@ public class ClientSession {
 
     public String getSessionId() {
         return sessionId;
-    }
-
-    private boolean waitingKeepAlive = false;
-
-    public void setWaitingKeepAlive(boolean waiting) {
-        this.waitingKeepAlive = waiting;
-    }
-
-    public boolean isWaitingKeepAlive() {
-        return waitingKeepAlive;
-    }
-
-    public boolean isTimedOut() {
-        return Instant.now().minusSeconds(30).isAfter(lastSeen);
     }
 }

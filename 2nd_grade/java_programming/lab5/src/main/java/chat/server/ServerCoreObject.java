@@ -39,6 +39,7 @@ public class ServerCoreObject {
         ServerSocket serverSocket = new ServerSocket(port);
         log("Server started on port " + port + " [Object Mode]");
         startKeepAliveSender();
+        startAfkTimeoutChecker();
 
         while (true) {
             Socket clientSocket = serverSocket.accept();
@@ -57,7 +58,6 @@ public class ServerCoreObject {
 
             while (!socket.isClosed()) {
                 Object obj = in.readObject();
-                session.updateLastSeen();
 
                 if (obj instanceof LoginCommand login) {
                     String sessionId = UUID.randomUUID().toString();
@@ -75,6 +75,7 @@ public class ServerCoreObject {
                     }
 
                     broadcastToAll(new EventUser("userlogin", login.name));
+                    sendUserListToAll();
                     log("User logged in: " + login.name);
 
                 } else if (obj instanceof MessageCommand msgCmd) {
@@ -84,6 +85,8 @@ public class ServerCoreObject {
                         out.flush();
                         continue;
                     }
+
+                    sender.updateLastSeen(); // только на сообщение
 
                     String text = sender.getName() + ": " + msgCmd.message;
                     synchronized (recentMessages) {
@@ -115,13 +118,14 @@ public class ServerCoreObject {
                         clients.remove(sender.getSocket());
                         sender.getSocket().close();
                         broadcastToAll(new EventUser("userlogout", sender.getName()));
+                        sendUserListToAll();
                         log("User logged out: " + sender.getName());
                     }
 
                 } else if (obj instanceof KeepOnResponse keep) {
                     ClientSession sender = findBySessionId(keep.session);
                     if (sender != null) {
-                        sender.setWaitingKeepAlive(false);
+                        sender.resetKeepAlive(); // только на keeponse
                     }
 
                 } else {
@@ -139,22 +143,39 @@ public class ServerCoreObject {
 
     private void startKeepAliveSender() {
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
-            for (ClientSession session : clients.values()) {
+            for (ClientSession session : new ArrayList<>(clients.values())) {
                 try {
-                    ObjectOutputStream out = new ObjectOutputStream(session.getSocket().getOutputStream());
-                    if (session.isWaitingKeepAlive()) {
+                    if (session.isConnectionLost()) {
                         clients.remove(session.getSocket());
                         session.getSocket().close();
-                        broadcastToAll(new EventUser("userlogout", session.getName()));
+                        broadcastToAll(new EventUser("sessiontimeout", session.getName()));
+                        sendUserListToAll();
                         log("No keeponse. Disconnected: " + session.getName());
                     } else {
+                        ObjectOutputStream out = new ObjectOutputStream(session.getSocket().getOutputStream());
                         out.writeObject(new KeepAliveEvent());
                         out.flush();
-                        session.setWaitingKeepAlive(true);
+                        session.incrementMissedKeepAlive();
                     }
                 } catch (IOException ignored) {}
             }
-        }, 2, 2, TimeUnit.SECONDS);
+        }, 1, 1, TimeUnit.SECONDS);
+    }
+
+    private void startAfkTimeoutChecker() {
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
+            for (ClientSession session : new ArrayList<>(clients.values())) {
+                try {
+                    if (session.isInactive()) {
+                        clients.remove(session.getSocket());
+                        session.getSocket().close();
+                        broadcastToAll(new EventUser("sessiontimeout", session.getName()));
+                        sendUserListToAll();
+                        log("AFK timeout: " + session.getName());
+                    }
+                } catch (IOException ignored) {}
+            }
+        }, 5, 5, TimeUnit.SECONDS);
     }
 
     private void broadcastToAll(Object event) {
@@ -165,6 +186,13 @@ public class ServerCoreObject {
                 out.flush();
             } catch (IOException ignored) {}
         }
+    }
+
+    private void sendUserListToAll() {
+        List<UserInfo> users = clients.values().stream()
+                .map(s -> new UserInfo(s.getName()))
+                .toList();
+        broadcastToAll(new ListUsersResponse(users));
     }
 
     private ClientSession findBySessionId(String sessionId) {

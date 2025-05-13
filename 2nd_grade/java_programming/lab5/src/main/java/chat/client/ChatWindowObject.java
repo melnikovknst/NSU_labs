@@ -19,6 +19,7 @@ public class ChatWindowObject extends JFrame {
     private final ObjectInputStream in;
     private final String sessionId;
     private final String userName;
+    private boolean isExiting = false;
 
     public ChatWindowObject(String userName, String host, int port) throws Exception {
         this.userName = userName;
@@ -26,7 +27,6 @@ public class ChatWindowObject extends JFrame {
         this.out = new ObjectOutputStream(socket.getOutputStream());
         this.in = new ObjectInputStream(socket.getInputStream());
 
-        // login
         LoginCommand login = new LoginCommand();
         login.name = userName;
         out.writeObject(login);
@@ -36,77 +36,67 @@ public class ChatWindowObject extends JFrame {
         if (!(response instanceof SuccessResponse ok)) {
             throw new RuntimeException("Login failed or unexpected response.");
         }
+
         this.sessionId = ok.session;
+        requestUserList();
 
         setupUI();
         startListening();
     }
 
     private void setupUI() {
-        setTitle("Chat (ObjectStream) - " + userName);
-        setLayout(new BorderLayout());
+        setTitle("Chat (Object) - " + userName);
+        setSize(600, 400);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         chatArea.setEditable(false);
-        add(new JScrollPane(chatArea), BorderLayout.CENTER);
+        JScrollPane chatScroll = new JScrollPane(chatArea);
 
+        JScrollPane userScroll = new JScrollPane(userList);
         userList.setPreferredSize(new Dimension(150, 0));
-        add(new JScrollPane(userList), BorderLayout.EAST);
 
-        add(inputField, BorderLayout.SOUTH);
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, chatScroll, userScroll);
+        split.setDividerLocation(400);
 
-        inputField.addActionListener(e -> {
-            String msg = inputField.getText().trim();
-            if (!msg.isEmpty()) {
-                try {
-                    out.writeObject(new MessageCommand(sessionId, msg));
-                    out.flush();
-                    inputField.setText("");
-                } catch (Exception ignored) {}
-            }
+        JButton sendButton = new JButton("Send");
+        JButton exitButton = new JButton("Exit");
+
+        JPanel bottom = new JPanel(new BorderLayout());
+        bottom.add(inputField, BorderLayout.CENTER);
+
+        JPanel buttons = new JPanel(new GridLayout(1, 2));
+        buttons.add(sendButton);
+        buttons.add(exitButton);
+        bottom.add(buttons, BorderLayout.EAST);
+
+        add(split, BorderLayout.CENTER);
+        add(bottom, BorderLayout.SOUTH);
+
+        sendButton.addActionListener(e -> sendMessage());
+        inputField.addActionListener(e -> sendMessage());
+
+        exitButton.addActionListener(e -> {
+            isExiting = true;
+            try {
+                out.writeObject(new LogoutCommand(sessionId));
+                out.flush();
+            } catch (Exception ignored) {}
+            dispose();
+            new LoginDialog(null).setVisible(true);
         });
 
-        setSize(600, 400);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
         setVisible(true);
     }
 
-    private void startListening() {
-        new Thread(() -> {
-            try {
-                while (!socket.isClosed()) {
-                    Object obj = in.readObject();
-
-                    if (obj instanceof EventMessage msg) {
-                        appendMessage(msg.message);
-                    } else if (obj instanceof EventUser evt) {
-                        if ("userlogin".equals(evt.command)) {
-                            appendMessage("[joined] " + evt.user);
-                        } else if ("userlogout".equals(evt.command)) {
-                            appendMessage("[left] " + evt.user);
-                        } else if ("sessiontimeout".equals(evt.command)) {
-                            handleConnectionLoss();
-                        }
-                        requestUserList();
-
-                    } else if (obj instanceof KeepAliveEvent) {
-                        out.writeObject(new KeepOnResponse(sessionId));
-                        out.flush();
-
-                    } else if (obj instanceof ListUsersResponse list) {
-                        SwingUtilities.invokeLater(() -> {
-                            userListModel.clear();
-                            List<UserInfo> users = list.listusers.get("user");
-                            for (UserInfo u : users) {
-                                userListModel.addElement(u.name);
-                            }
-                        });
-                    }
-                }
-            } catch (Exception e) {
-                handleConnectionLoss();
-            }
-        }).start();
+    private void sendMessage() {
+        String msg = inputField.getText().trim();
+        if (msg.isEmpty()) return;
+        try {
+            out.writeObject(new MessageCommand(sessionId, msg));
+            out.flush();
+            inputField.setText("");
+        } catch (Exception ignored) {}
     }
 
     private void requestUserList() {
@@ -123,7 +113,45 @@ public class ChatWindowObject extends JFrame {
         });
     }
 
+    private void startListening() {
+        new Thread(() -> {
+            try {
+                while (!socket.isClosed()) {
+                    Object obj = in.readObject();
+
+                    if (obj instanceof EventMessage msg) {
+                        appendMessage(msg.from + ": " + msg.message);
+                    } else if (obj instanceof EventUser evt) {
+                        if ("userlogin".equals(evt.command)) {
+                            appendMessage(evt.user + " joined");
+                            requestUserList();
+                        } else if ("userlogout".equals(evt.command)) {
+                            appendMessage( evt.user + " left");
+                            requestUserList();
+                        } else if ("sessiontimeout".equals(evt.command)) {
+                            handleConnectionLoss();
+                        }
+                    } else if (obj instanceof KeepAliveEvent) {
+                        out.writeObject(new KeepOnResponse(sessionId));
+                        out.flush();
+                    } else if (obj instanceof ListUsersResponse list) {
+                        SwingUtilities.invokeLater(() -> {
+                            userListModel.clear();
+                            List<UserInfo> users = list.listusers.get("user");
+                            for (UserInfo u : users) {
+                                userListModel.addElement(u.name);
+                            }
+                        });
+                    }
+                }
+            } catch (Exception e) {
+                handleConnectionLoss();
+            }
+        }).start();
+    }
+
     private void handleConnectionLoss() {
+        if (isExiting) return;
         SwingUtilities.invokeLater(() -> {
             dispose();
             new ReconnectDialog(userName, socket.getInetAddress().getHostAddress(), socket.getPort(), "object");

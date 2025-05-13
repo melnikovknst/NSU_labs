@@ -12,9 +12,7 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
@@ -27,7 +25,7 @@ public class ServerCoreJson {
     private static final String LOG_FOLDER = "logs/";
 
     private final Map<Socket, ClientSession> clients = new ConcurrentHashMap<>();
-    private final List<String> history = new ArrayList<>();
+    private final List<String> history = Collections.synchronizedList(new ArrayList<>());
 
     public ServerCoreJson(int port, boolean loggingEnabled) {
         this.port = port;
@@ -46,7 +44,8 @@ public class ServerCoreJson {
     public void start() throws IOException {
         ServerSocket serverSocket = new ServerSocket(port);
         log("Server started on port " + port + " [JSON mode]");
-        startTimeoutChecker();
+        startKeepAliveSender();
+        startAfkTimeoutChecker();
 
         while (true) {
             Socket clientSocket = serverSocket.accept();
@@ -68,13 +67,10 @@ public class ServerCoreJson {
                     byte[] lenBuf = in.readNBytes(4);
                     int length = ByteBuffer.wrap(lenBuf).getInt();
                     byte[] body = in.readNBytes(length);
-                    session.updateLastSeen();
 
                     String json = new String(body);
                     JsonNode root = mapper.readTree(json);
                     String command = root.path("command").asText();
-                    System.out.println("SERVER received command: " + command);
-
 
                     switch (command) {
                         case "login" -> {
@@ -95,14 +91,19 @@ public class ServerCoreJson {
                         }
 
                         case "message" -> {
-                            System.out.println("Session id for message = " + session.getSessionId());
                             MessageCommand msg = mapper.treeToValue(root, MessageCommand.class);
+                            session.updateLastSeen();
                             log("[" + session.getName() + "]: " + msg.message);
-                            history.add(session.getName() + ": " + msg.message);
+                            synchronized (history) {
+                                history.add(session.getName() + ": " + msg.message);
+                                if (history.size() > 20) history.remove(0);
+                            }
                             broadcast(new EventMessage(session.getName(), msg.message));
                         }
 
-                        case "keeponse" -> session.updateLastSeen();
+                        case "keeponse" -> {
+                            session.resetKeepAlive();
+                        }
 
                         case "logout" -> {
                             log(session.getName() + " exited via Exit button");
@@ -171,29 +172,55 @@ public class ServerCoreJson {
     private void sendHistory(OutputStream out) {
         try {
             ObjectMapper mapper = new ObjectMapper();
-            for (String msg : history.stream().skip(Math.max(0, history.size() - 20)).toList()) {
-                String[] parts = msg.split(":", 2);
-                if (parts.length == 2) {
-                    EventMessage historyMsg = new EventMessage(parts[0].trim(), parts[1].trim());
-                    sendWithLengthPrefix(out, mapper.writeValueAsBytes(historyMsg));
+            synchronized (history) {
+                for (String msg : history) {
+                    String[] parts = msg.split(":", 2);
+                    if (parts.length == 2) {
+                        EventMessage historyMsg = new EventMessage(parts[0].trim(), parts[1].trim());
+                        sendWithLengthPrefix(out, mapper.writeValueAsBytes(historyMsg));
+                    }
                 }
             }
         } catch (IOException ignored) {}
     }
 
-    private void startTimeoutChecker() {
+    private void startKeepAliveSender() {
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
-            for (ClientSession session : clients.values()) {
-                if (session.isTimedOut()) {
-                    try {
+            for (ClientSession session : new ArrayList<>(clients.values())) {
+                try {
+                    if (session.isConnectionLost()) {
                         session.getSocket().close();
                         log("No keeponse. Disconnected: " + session.getName());
                         broadcast(new EventUser("sessiontimeout", session.getName()));
                         sendUserListToAll();
-                    } catch (IOException ignored) {}
-                }
+                    } else {
+                        OutputStream out = session.getSocket().getOutputStream();
+                        ObjectMapper mapper = new ObjectMapper();
+
+                        Map<String, Object> event = Map.of("event", Map.of("name", "keepalive"));
+                        byte[] data = mapper.writeValueAsBytes(event);
+                        sendWithLengthPrefix(out, data);
+
+                        session.incrementMissedKeepAlive();
+                    }
+                } catch (IOException ignored) {}
             }
-        }, 30, 1, TimeUnit.SECONDS);
+        }, 1, 1, TimeUnit.SECONDS);
+    }
+
+    private void startAfkTimeoutChecker() {
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
+            for (ClientSession session : new ArrayList<>(clients.values())) {
+                try {
+                    if (session.isInactive()) {
+                        session.getSocket().close();
+                        log("AFK timeout: " + session.getName());
+                        broadcast(new EventUser("sessiontimeout", session.getName()));
+                        sendUserListToAll();
+                    }
+                } catch (IOException ignored) {}
+            }
+        }, 5, 5, TimeUnit.SECONDS);
     }
 
     private void log(String message) {

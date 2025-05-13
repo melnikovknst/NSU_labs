@@ -106,6 +106,7 @@ public class ChatWindowJson extends JFrame {
                     Map<?, ?> data = receiveJson();
                     if (data.containsKey("command")) {
                         String type = (String) data.get("command");
+                        System.out.println("PACKET " + type);
 
                         switch (type) {
                             case "message" -> {
@@ -124,6 +125,7 @@ public class ChatWindowJson extends JFrame {
                                 requestUserList();
                             }
                             case "keepalive" -> {
+                                System.out.println("keep");
                                 KeepOnResponse keep = new KeepOnResponse(sessionId);
                                 keep.command = "keeponse";
                                 sendJson(keep);
@@ -157,12 +159,10 @@ public class ChatWindowJson extends JFrame {
         if (msg.isEmpty()) return;
 
         MessageCommand message = new MessageCommand();
-        message.command = "message";
         message.session = sessionId;
         message.message = msg;
 
         try {
-            System.out.println("Sending: " + mapper.writeValueAsString(message)); // лог
             sendJson(message);
             inputField.setText("");
         } catch (Exception e) {
