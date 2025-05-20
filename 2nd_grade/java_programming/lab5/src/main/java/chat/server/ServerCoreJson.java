@@ -149,7 +149,7 @@ public class ServerCoreJson {
         out.flush();
     }
 
-    private void broadcast(Object message) {
+    synchronized private void broadcast(Object message) {
         try {
             byte[] data = new ObjectMapper().writeValueAsBytes(message);
             for (ClientSession s : clients.values()) {
@@ -187,26 +187,33 @@ public class ServerCoreJson {
     private void startKeepAliveSender() {
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
             for (ClientSession session : new ArrayList<>(clients.values())) {
-                try {
-                    if (session.isConnectionLost()) {
+
+                if (session.isConnectionLost()) {
+                    try {
                         session.getSocket().close();
-                        log("No keeponse. Disconnected: " + session.getName());
-                        broadcast(new EventUser("sessiontimeout", session.getName()));
-                        sendUserListToAll();
-                    } else {
-                        OutputStream out = session.getSocket().getOutputStream();
-                        ObjectMapper mapper = new ObjectMapper();
+                    } catch (IOException ignored) {}
 
-                        Map<String, Object> event = Map.of("event", Map.of("name", "keepalive"));
-                        byte[] data = mapper.writeValueAsBytes(event);
-                        sendWithLengthPrefix(out, data);
+                    log("No keeponse. Disconnected: " + session.getName());
+                    broadcast(new EventUser("sessiontimeout", session.getName()));
+                    sendUserListToAll();
+                    continue;
+                }
 
-                        session.incrementMissedKeepAlive();
-                    }
-                } catch (IOException ignored) {}
+                try {
+                    OutputStream out = session.getSocket().getOutputStream();
+                    KeepAliveEvent keep = new KeepAliveEvent();
+                    byte[] data = new ObjectMapper().writeValueAsBytes(keep);
+                    sendWithLengthPrefix(out, data);
+
+                    session.incrementMissedKeepAlive();
+
+                } catch (IOException ignored) {
+
+                }
             }
         }, 1, 1, TimeUnit.SECONDS);
     }
+
 
     private void startAfkTimeoutChecker() {
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {

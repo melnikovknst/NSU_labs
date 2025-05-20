@@ -30,7 +30,7 @@ public class ClientSession {
     }
 
     public boolean isInactive() {
-        return Instant.now().minusSeconds(30).isAfter(lastSeen);
+        return Instant.now().minusSeconds(60).isAfter(lastSeen);
     }
 
     public void resetKeepAlive() {

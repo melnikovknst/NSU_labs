@@ -178,7 +178,7 @@ public class ServerCoreObject {
         }, 5, 5, TimeUnit.SECONDS);
     }
 
-    private void broadcastToAll(Object event) {
+    synchronized private void broadcastToAll(Object event) {
         for (ClientSession s : clients.values()) {
             try {
                 ObjectOutputStream out = new ObjectOutputStream(s.getSocket().getOutputStream());

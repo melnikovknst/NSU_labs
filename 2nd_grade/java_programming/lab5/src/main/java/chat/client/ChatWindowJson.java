@@ -127,7 +127,6 @@ public class ChatWindowJson extends JFrame {
                             case "keepalive" -> {
                                 System.out.println("keep");
                                 KeepOnResponse keep = new KeepOnResponse(sessionId);
-                                keep.command = "keeponse";
                                 sendJson(keep);
                             }
                             case "history" -> {
