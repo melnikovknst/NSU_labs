@@ -2,6 +2,7 @@ package chat.server;
 
 import java.net.Socket;
 import java.time.Instant;
+import java.time.Duration;
 
 public class ClientSession {
     private final Socket socket;
@@ -9,12 +10,13 @@ public class ClientSession {
     private String sessionId;
 
     private Instant lastSeen;
-    private int missedKeepAliveCount = 0;
+    private Instant lastKeepAliveReceived;
 
     public ClientSession(Socket socket, String name) {
         this.socket = socket;
         this.name = name;
         this.lastSeen = Instant.now();
+        this.lastKeepAliveReceived = Instant.now();
     }
 
     public Socket getSocket() {
@@ -34,15 +36,12 @@ public class ClientSession {
     }
 
     public void resetKeepAlive() {
-        missedKeepAliveCount = 0;
-    }
-
-    public void incrementMissedKeepAlive() {
-        missedKeepAliveCount++;
+        this.lastKeepAliveReceived = Instant.now();
     }
 
     public boolean isConnectionLost() {
-        return missedKeepAliveCount >= 10;
+        Duration duration = Duration.between(lastKeepAliveReceived, Instant.now());
+        return duration.getSeconds() >= 10;
     }
 
     public void setName(String name) {

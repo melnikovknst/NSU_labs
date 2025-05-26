@@ -155,7 +155,7 @@ public class ServerCoreObject {
                         ObjectOutputStream out = new ObjectOutputStream(session.getSocket().getOutputStream());
                         out.writeObject(new KeepAliveEvent());
                         out.flush();
-                        session.incrementMissedKeepAlive();
+                        //session.incrementMissedKeepAlive();
                     }
                 } catch (IOException ignored) {}
             }

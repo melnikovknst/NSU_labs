@@ -152,13 +152,19 @@ public class ServerCoreJson {
     synchronized private void broadcast(Object message) {
         try {
             byte[] data = new ObjectMapper().writeValueAsBytes(message);
-            for (ClientSession s : clients.values()) {
+            for (ClientSession s : new ArrayList<>(clients.values())) {
                 try {
                     sendWithLengthPrefix(s.getSocket().getOutputStream(), data);
-                } catch (IOException ignored) {}
+                } catch (IOException e) {
+                    log("Broadcast failed to " + s.getName() + ", disconnecting...");
+                    try {
+                        s.getSocket().close();
+                    } catch (IOException ignored) {}
+                }
             }
         } catch (IOException ignored) {}
     }
+
 
     private void sendUserListToAll() {
         List<UserInfo> users = clients.values().stream()
@@ -187,33 +193,26 @@ public class ServerCoreJson {
     private void startKeepAliveSender() {
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
             for (ClientSession session : new ArrayList<>(clients.values())) {
-
-                if (session.isConnectionLost()) {
-                    try {
-                        session.getSocket().close();
-                    } catch (IOException ignored) {}
-
-                    log("No keeponse. Disconnected: " + session.getName());
-                    broadcast(new EventUser("sessiontimeout", session.getName()));
-                    sendUserListToAll();
-                    continue;
-                }
-
                 try {
+                    if (session.isConnectionLost()) {
+                        session.getSocket().close();
+                        log("No keeponse (timeout 10s): " + session.getName());
+                        continue;
+                    }
+
                     OutputStream out = session.getSocket().getOutputStream();
                     KeepAliveEvent keep = new KeepAliveEvent();
                     byte[] data = new ObjectMapper().writeValueAsBytes(keep);
                     sendWithLengthPrefix(out, data);
-
-                    session.incrementMissedKeepAlive();
-
-                } catch (IOException ignored) {
-
+                } catch (IOException e) {
+                    try {
+                        session.getSocket().close();
+                    } catch (IOException ignored) {}
+                    log("Connection lost (IOException): " + session.getName());
                 }
             }
         }, 1, 1, TimeUnit.SECONDS);
     }
-
 
     private void startAfkTimeoutChecker() {
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
@@ -222,8 +221,6 @@ public class ServerCoreJson {
                     if (session.isInactive()) {
                         session.getSocket().close();
                         log("AFK timeout: " + session.getName());
-                        broadcast(new EventUser("sessiontimeout", session.getName()));
-                        sendUserListToAll();
                     }
                 } catch (IOException ignored) {}
             }
